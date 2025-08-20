@@ -6,7 +6,7 @@ import { SharedStoreService } from '../common/shared-store.service';
 import { CONTACTS_SETTINGS, CONTACTS_URIS } from '../../consts/sys-consts';
 import { HttpParams } from '@angular/common/http';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { cloneDeep, get } from 'lodash';
+import { cloneDeep, get } from 'lodash-es';
 
 @Injectable({
   providedIn: 'root'

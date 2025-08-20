@@ -9,7 +9,7 @@ import { takeUntil } from 'rxjs';
 import { UiMarkerService } from '../../../services/ui-marker/ui-marker.service';
 import { PageListingEntity } from '../../../types/ui-marker-type';
 import { UploadImageSuppInfo } from '../../common/upload-image/upload-image-type';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { UrlToolService } from '../../../services/common/url-tool.service';
 
 @Component({

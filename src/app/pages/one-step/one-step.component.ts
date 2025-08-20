@@ -6,7 +6,7 @@ import { FaviconService } from '../../services/common/favicon.service';
 import { OneStepService } from '../../services/one-step/one-step.service';
 import { StringToolService } from '../../services/common/string-tool.service';
 import { CommandSet } from '../../types/one-step-type';
-import { get } from 'lodash';
+import { get } from 'lodash-es';
 
 @Component({
   selector: 'app-one-step',

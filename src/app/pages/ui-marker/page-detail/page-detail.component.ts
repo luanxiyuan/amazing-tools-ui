@@ -15,7 +15,7 @@ import { FormBuilder, FormControl, FormRecord, Validators } from '@angular/forms
 import { ElementFormAPIControlEntity, PageFormAPIControlEntity, ApiFormDetails, MarkerFormDetails, PageFormDetails, CanvasMarkerPopup } from '../../../types/ui-marker-type';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import { cloneDeep, isEqual, set } from 'lodash';
+import { cloneDeep, isEqual, set } from 'lodash-es';
 import { UrlToolService } from '../../../services/common/url-tool.service';
 import { ApiTreeService } from '../../../services/api-tree/api-tree.service';
 import { OpenAndPrivateApi, OpenAndPrivateApiEntity } from '../../../types/api-tree-type';

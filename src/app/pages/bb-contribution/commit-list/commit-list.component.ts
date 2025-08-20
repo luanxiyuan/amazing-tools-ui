@@ -7,7 +7,7 @@ import { CommitRecord, RepoInfo, TableFilterOption } from '../../../types/bb-con
 import { ADMIN_SOEID, BB_CONTRIBUTION_SETTINGS } from '../../../consts/sys-consts';
 import { UrlToolService } from '../../../services/common/url-tool.service';
 import { ActivatedRoute } from '@angular/router';
-import { cloneDeep, get } from 'lodash';
+import { cloneDeep, get } from 'lodash-es';
 import { CommunicationToolService } from '../../../services/common/communication-tool.service';
 
 @Component({

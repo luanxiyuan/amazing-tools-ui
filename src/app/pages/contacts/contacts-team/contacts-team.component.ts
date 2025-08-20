@@ -2,7 +2,7 @@ import { Component, HostListener } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ContactsService } from '../../../services/contacts/contacts.service';
 import { Location, Person, PersonEntity, Team, TeamEntity, TeamUIEntity } from '../../../types/contacts-type';
-import { cloneDeep, get } from 'lodash';
+import { cloneDeep, get } from 'lodash-es';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { ActivatedRoute } from '@angular/router';
 import { SharedStoreService } from '../../../services/common/shared-store.service';

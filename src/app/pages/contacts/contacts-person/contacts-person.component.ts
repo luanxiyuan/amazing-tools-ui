@@ -5,7 +5,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { SharedStoreService } from '../../../services/common/shared-store.service';
 import { UrlToolService } from '../../../services/common/url-tool.service';
 import { Location, Person, PersonEntity, Team } from '../../../types/contacts-type';
-import { cloneDeep, get } from 'lodash';
+import { cloneDeep, get } from 'lodash-es';
 import { CONTACTS_SETTINGS, MODULE_NAMES } from '../../../consts/sys-consts';
 import { StringToolService } from '../../../services/common/string-tool.service';
 import { CommunicationToolService } from '../../../services/common/communication-tool.service';

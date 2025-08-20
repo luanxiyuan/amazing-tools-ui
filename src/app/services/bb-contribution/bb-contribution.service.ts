@@ -6,7 +6,7 @@ import { HttpParams } from '@angular/common/http';
 import { BB_CONTRIBUTION_SETTINGS, BB_CONTRIBUTION_URIS } from '../../consts/sys-consts';
 import { catchError, map } from 'rxjs';
 import { CommitRecord } from '../../types/bb-contribution';
-import { get } from 'lodash';
+import { get } from 'lodash-es';
 
 @Injectable({
   providedIn: 'root'

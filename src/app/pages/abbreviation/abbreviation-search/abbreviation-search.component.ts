@@ -7,7 +7,7 @@ import { SharedStoreService } from '../../../services/common/shared-store.servic
 import { ActivatedRoute } from '@angular/router';
 import { ABBREVIATION_SETTINGS, MODULE_NAMES } from '../../../consts/sys-consts';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { StringToolService } from '../../../services/common/string-tool.service';
 import { FileToolService } from '../../../services/common/file-tool.service';
 import { UrlToolService } from '../../../services/common/url-tool.service';

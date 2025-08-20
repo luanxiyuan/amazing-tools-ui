@@ -10,7 +10,7 @@ import { ApiTreeService } from '../../../services/api-tree/api-tree.service';
 import { Application } from '../../../types/home-type';
 import { SharedStoreService } from '../../../services/common/shared-store.service';
 import { Subject, debounceTime } from 'rxjs';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { UiApiRelation } from '../../../types/ui-marker-type';
 
 @Component({

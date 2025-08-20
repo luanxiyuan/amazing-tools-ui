@@ -6,7 +6,7 @@ import { ABBREVIATION_URIS } from '../../consts/sys-consts';
 import { catchError, map } from 'rxjs';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { HttpParams } from '@angular/common/http';
-import { get } from 'lodash';
+import { get } from 'lodash-es';
 
 @Injectable({
   providedIn: 'root'

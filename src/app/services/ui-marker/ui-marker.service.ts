@@ -4,7 +4,7 @@ import { UI_MARKER_URIS, API_RESP_MESSAGE } from '../../consts/sys-consts';
 import { HttpClientService } from  '../common/http-client.service';
 import { SharedStoreService } from '../common/shared-store.service';
 import { CanvasToolService } from '../../services/common/canvas-tool.service';
-import { get } from 'lodash';
+import { get } from 'lodash-es';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { PageListingEntity } from '../../types/ui-marker-type';
 import { Observable, map } from 'rxjs';

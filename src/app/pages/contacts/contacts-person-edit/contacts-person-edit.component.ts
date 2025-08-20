@@ -4,7 +4,7 @@ import { CONTACTS_SETTINGS } from '../../../consts/sys-consts';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { Person, Location, PersonEntity, Team, TeamEntity } from '../../../types/contacts-type';
 import { StringToolService } from '../../../services/common/string-tool.service';
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'lodash-es';
 import { DateService } from '../../../services/common/date.service';
 
 @Component({

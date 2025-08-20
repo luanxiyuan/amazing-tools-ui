@@ -7,7 +7,7 @@ import { catchError, map, Observable } from 'rxjs';
 import { COMMON_URIS, ONE_STEP_URIS } from '../../consts/sys-consts';
 import { CommandSet } from '../../types/one-step-type';
 import { HttpParams } from '@angular/common/http';
-import { get } from 'lodash';
+import { get } from 'lodash-es';
 
 @Injectable({
   providedIn: 'root'

@@ -5,7 +5,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { SharedStoreService } from '../common/shared-store.service';
 import { HttpParams } from '@angular/common/http';
 import { API_TREE_SETTINGS, API_TREE_URIS, UI_MARKER_URIS, URI_SEARCH_MODES } from '../../consts/sys-consts';
-import { cloneDeep, get } from 'lodash';
+import { cloneDeep, get } from 'lodash-es';
 import { catchError, map } from 'rxjs';
 import { UiApiRelation } from '../../types/ui-marker-type';
 import { UrlToolService } from '../common/url-tool.service';

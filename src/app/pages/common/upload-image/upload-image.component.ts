@@ -3,7 +3,7 @@ import { SharedStoreService } from '../../../services/common/shared-store.servic
 import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
 import { ERROR_CODE_MAP, PAGE_VIEW_TYPES, UI_MARKER_SETTINGS,
   APPLICATION_MARKETS, APPLICATION_REGIONS } from '../../../consts/sys-consts';
-import { get } from 'lodash';
+import { get } from 'lodash-es';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { UploadImageSuppInfo } from './upload-image-type';
 

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { get } from 'lodash';
+import { get } from 'lodash-es';
 import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
 import { ERROR_CODE_MAP } from '../../../consts/sys-consts';
 import { SharedStoreService } from '../../../services/common/shared-store.service';
