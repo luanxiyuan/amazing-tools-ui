@@ -1,0 +1,42 @@
+<div class="container">
+    <div nz-row class="introduction">
+        <div nz-col nzSpan="24">
+            <article nz-typography>
+                <span class="header1">
+                    Find & Share Something Good to 
+                </span>
+                <span class="header2">EAT</span>
+                <p nz-typography>
+                    EAT is the abbreviation of "Enterprise Amazing Tools" and is a platform for finding and sharing
+                    tools that are frequently used in daily work.
+                    It is designed to improve the productivity and benefits of developers, business analysts, production
+                    support teams, testing teams, etc.<br>
+                    <span nz-typography>
+                        <strong>
+                            Please be careful not to share any sensitive information on this platform.
+                        </strong>
+                    </span>
+                </p>
+            </article>
+        </div>
+    </div>
+
+    <div nz-row class="function-list">
+        <div nz-col nzSpan="24">
+            <div nz-row class="app-list">
+                <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12" [nzLg]="12" [nzXl]="8" [nzXXl]="6"
+                    *ngFor="let app of toolApps" class="tool-app-card">
+                    <nz-card nzHoverable class="function-card" (click)="goToAppLandingPage(app.uri)">
+                        <nz-card-meta [nzTitle]="app.name" [nzDescription]="app.desc"></nz-card-meta>
+                    </nz-card>
+                </div>
+                <div nz-col [nzXs]="24" [nzSm]="24" [nzMd]="12" [nzLg]="12" [nzXl]="8" [nzXXl]="6"
+                    class="tool-app-card">
+                    <nz-card nzHoverable class="function-card-add" (click)="openTeamsWindow()" nz-tooltip nzTooltipTitle="Click to contact the admin, share your amazing tool and get it integrated here.">
+                        <span nz-icon nzType="plus" nzTheme="outline" class="large-icon"></span>
+                    </nz-card>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

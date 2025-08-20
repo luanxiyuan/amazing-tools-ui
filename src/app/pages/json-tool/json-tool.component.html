@@ -1,0 +1,171 @@
+<nz-layout class="layout">
+    <nz-header class="json-tool-header">
+        <div class="logo-text">Json Tools</div>
+    </nz-header>
+
+    <div class="json-tool-body">
+        <nz-content>
+            <div class="inner-content">
+                <div nz-row>
+                    <div nz-col nzSpan="7" class="swagger-srouce">
+                        <nz-tabset nzType="card">
+                            <nz-tab [nzTitle]="'Find by value'" (nzClick)="switchSearchType('value')">
+                                <form nz-form nzLayout="vertical" [formGroup]="jsonFormForValueSearch" (ngSubmit)="findJsonLabelByValue()">
+                                    <nz-form-item>
+                                        <h4>Json node value</h4>
+                                        <nz-form-control>
+                                            <nz-input-group [nzSuffix]="inputClearLabelValue">
+                                                <input nz-input formControlName="labelValue" placeholder=""/>
+                                            </nz-input-group>
+                                            <ng-template #inputClearLabelValue>
+                                                <span *ngIf="jsonFormForValueSearch.get('labelValue')?.value" nz-icon class="ant-input-clear-icon"
+                                                    nzTheme="fill" nzType="close-circle" (click)="clearInputLabelValue()"></span>
+                                            </ng-template>
+                                        </nz-form-control>
+                                        <h4 class="mt-20">Paste your Json</h4>
+                                        <nz-form-control>
+                                            <textarea class="textarea-swagger" nz-input formControlName="sourceJson" placeholder="" [nzAutosize]="{ minRows: 10 }"></textarea>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <button nz-button nzBlock class="login-form-button login-form-margin" [nzType]="'primary'" [disabled]="!jsonFormForValueSearch.valid">Find it</button>
+                                </form>
+                            </nz-tab>
+                            <nz-tab [nzTitle]="'Find by key'" (nzClick)="switchSearchType('key')">
+                                <form nz-form nzLayout="vertical" [formGroup]="jsonFormForKeySearch" (ngSubmit)="findJsonLabelByKey()">
+                                    <nz-form-item>
+                                        <h4>Json node key</h4>
+                                        <nz-form-control>
+                                            <nz-input-group [nzSuffix]="inputClearLabelKey">
+                                                <input nz-input formControlName="labelKey" placeholder=""/>
+                                            </nz-input-group>
+                                            <ng-template #inputClearLabelKey>
+                                                <span *ngIf="jsonFormForKeySearch.get('labelKey')?.value" nz-icon class="ant-input-clear-icon"
+                                                    nzTheme="fill" nzType="close-circle" (click)="clearInputLabelKey()"></span>
+                                            </ng-template>
+                                        </nz-form-control>
+                                        <h4 class="mt-20">Paste your Json</h4>
+                                        <nz-form-control>
+                                            <textarea class="textarea-swagger" nz-input formControlName="sourceJson" placeholder="" [nzAutosize]="{ minRows: 10 }"></textarea>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <button nz-button nzBlock class="login-form-button login-form-margin" [nzType]="'primary'" [disabled]="!jsonFormForKeySearch.valid">Find it</button>
+                                </form>
+                            </nz-tab>
+                            <nz-tab [nzTitle]="'Extract Value List'" (nzClick)="switchSearchType('extractValue')">
+                                <div class="mb-10">
+                                    <span nz-icon nzType="info-circle"></span> Extract all the Json values into a list</div>
+                                <span><h4>Paste your Json</h4></span>
+                                <form nz-form nzLayout="vertical" [formGroup]="jsonFormForValueExtract" (ngSubmit)="extractJsonValueList()">
+                                    <nz-form-item>
+                                        <nz-form-control>
+                                            <textarea class="textarea-swagger" nz-input formControlName="sourceJson" placeholder="" [nzAutosize]="{ minRows: 10 }"></textarea>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <button nz-button nzBlock class="login-form-button login-form-margin" [nzType]="'primary'" [disabled]="!jsonFormForValueExtract.valid">Extract it</button>
+                                </form>
+                            </nz-tab>
+                        </nz-tabset>
+                    </div>
+                    <div nz-col nzSpan="17">
+                        <!-- labelFinderResultsByValue result display -->
+                        <div class="ml-10" *ngIf="searchType === 'value'">
+                            <h4>
+                                <nz-badge nzStandalone [nzOverflowCount]="badgeOverflowCount" [nzCount]="labelFinderResultsByValue.length"></nz-badge>
+                                Result
+                                <span *ngIf="currentFindingByValue">of: {{currentFindingByValue}}</span>
+                            </h4>
+                            <nz-table *ngIf="labelFinderResultsByValue.length > 0"
+                                [nzData]="labelFinderResultsByValue"
+                                nzShowPagination="false"
+                                id="tableDiv">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Label Path
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ng-container *ngFor="let data of labelFinderResultsByValue">
+                                        <tr>
+                                            <td>
+                                                <span class="break-text">{{data.path}}</span>
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                            </nz-table>
+                        </div>
+
+                        <!-- labelFinderResultsByValue result display -->
+                        <div class="ml-10" *ngIf="searchType === 'key'">
+                            <h4>
+                                <nz-badge nzStandalone [nzOverflowCount]="badgeOverflowCount" [nzCount]="labelFinderResultsByKey.length"></nz-badge>
+                                Result 
+                                <span *ngIf="currentFindingByKey">of: {{currentFindingByKey}}</span>
+                            </h4>
+                            <nz-table *ngIf="labelFinderResultsByKey.length > 0"
+                                [nzData]="labelFinderResultsByKey"
+                                nzShowPagination="false"
+                                id="tableDiv">
+                                <thead>
+                                    <tr>
+                                        <th class="min-w-300">
+                                            Label Full Path
+                                        </th>
+                                        <th>
+                                            Label Value
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ng-container *ngFor="let data of labelFinderResultsByKey">
+                                        <tr>
+                                            <td>
+                                                <span class="break-text">{{data.path}}</span>
+                                            </td>
+                                            <td>
+                                                <pre class="pre-label-font pre-label-breakline"  style="word-wrap: break-word; word-break: break-word; white-space: normal; max-width: 100%; overflow-wrap: anywhere;">{{data.value}}</pre>
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                            </nz-table>
+                        </div>
+
+                        <!-- extractedValueList (string[]) display -->
+                        <div class="ml-10" *ngIf="searchType === 'extractValue'">
+                            <h4>
+                                <nz-badge nzStandalone [nzOverflowCount]="badgeOverflowCount" [nzCount]="extractedValueList.length"></nz-badge>
+                                Result
+                            </h4>
+                            <nz-table *ngIf="extractedValueList.length > 0"
+                                [nzData]="extractedValueList"
+                                nzShowPagination="false"
+                                id="tableDiv">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Value List
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ng-container *ngFor="let data of extractedValueList">
+                                        <tr>
+                                            <td>
+                                                <span class="break-text">{{data}}</span>
+                                            </td>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                            </nz-table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </nz-content>
+    </div>
+
+</nz-layout>

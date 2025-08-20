@@ -1,0 +1,228 @@
+<div class="search-form">
+    <form nz-form [formGroup]="searchForm" class="ant-advanced-search-form" (submit)="onSearchPersons()">
+        <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="8">
+                <nz-form-item>
+                    <nz-form-label nzFor="team">Team</nz-form-label>
+                    <nz-form-control>
+                        <nz-select nzShowSearch nzAllowClear formControlName="team">
+                            <nz-option *ngFor="let team of teams" [nzValue]="team.id" [nzLabel]="team.name"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="8">
+                <nz-form-item>
+                    <nz-form-label nzFor="name">Name</nz-form-label>
+                    <nz-form-control>
+                        <nz-input-group [nzSuffix]="inputClearName">
+                            <input nz-input formControlName="name" (ngModelChange)="onPersonNameFilter($event)" [nzAutocomplete]="autoPerson" />
+                            <nz-autocomplete [nzDataSource]="filteredPersonNames" #autoPerson></nz-autocomplete>
+                        </nz-input-group>
+                        <ng-template #inputClearName>
+                            <span *ngIf="searchForm.get('name')?.value" nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="close-circle" (click)="clearInputName()"></span>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="8">
+                <nz-form-item>
+                    <nz-form-label nzFor="remark">Remark</nz-form-label>
+                    <nz-form-control>
+                        <nz-input-group [nzSuffix]="inputClearRemark">
+                            <input nz-input formControlName="remark" (ngModelChange)="onPersonRemarkFilter($event)" [nzAutocomplete]="autoRemark" />
+                            <nz-autocomplete [nzDataSource]="filteredPersonRemarks" #autoRemark></nz-autocomplete>
+                        </nz-input-group>
+                        <ng-template #inputClearRemark>
+                            <span *ngIf="searchForm.get('remark')?.value" nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="close-circle" (click)="clearInputRemark()"></span>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+        <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="8">
+                <nz-form-item>
+                    <nz-form-label nzFor="soeId">SOE ID</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input formControlName="soeId" />
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="8">
+                <nz-form-item>
+                    <nz-form-label nzFor="location">Location</nz-form-label>
+                    <nz-form-control>
+                        <nz-select nzShowSearch nzAllowClear formControlName="location" >
+                            <nz-option *ngFor="let location of locations" [nzValue]="location.id"
+                                [nzLabel]="location.name"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="8">
+                <nz-space>
+                    <button type="submit" *nzSpaceItem nz-button nzType="primary">
+                        <span nz-icon nzType="search" nzTheme="outline"></span>
+                        Search
+                    </button>
+                    <button *nzSpaceItem nz-button nz-tooltip nzTooltipTitle="Reset" nzType="default" (click)="resetSearchForm()">
+                        <span nz-icon nzType="clear" nzTheme="outline"></span>
+                    </button>
+                    <button *nzSpaceItem nz-button nz-tooltip nzTooltipTitle="Add a Person" nzType="default" (click)="openPersonAddDrawer()">
+                        <span nz-icon nzType="plus-circle" nzTheme="outline"></span>
+                    </button>
+                    <!-- <button *nzSpaceItem nz-button nz-tooltip nzTooltipTitle="Export to Excel" nzType="default" (click)="exportPersonToExcel()">
+                        <span nz-icon nzType="export" nzTheme="outline"></span>
+                    </button> -->
+                </nz-space>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="floating-div" [ngClass]="{'show': showFloatingAddBtnFlag}">
+    <button nz-button nzSize="large" nz-tooltip nzTooltipPlacement="left" nzTooltipTitle="Add a Person" nzType="primary" nzShape="circle" (click)="openPersonAddDrawer()">
+        <span nz-icon nzType="plus-circle" nzTheme="outline"></span>
+    </button>
+</div>
+
+<nz-table 
+    [nzData]="displayPersons"
+    [nzFrontPagination]="false"
+    [nzPageSize]="personPageSize" 
+    [nzPageIndex]="currentPageIndex" 
+    [nzTotal]="filteredPersonCount" 
+    (nzPageIndexChange)="onPageIndexChange($event)" 
+    id="tableDiv">
+    <thead>
+        <tr>
+            <th>SOE ID</th>
+            <th>
+                Name
+                <nz-badge nzStandalone [nzOverflowCount]="badgeOverflowCount" [nzCount]="filteredPersonCount"></nz-badge>
+            </th>
+            <th>Team</th>
+            <th>Location</th>
+            <th class="w-200">Remark</th>
+            <th class="operation-column">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of displayPersons">
+            <td>
+                <button class="mr-8" *ngIf="data.soeId" nz-button nzType="default" (click)="copyString(data.soeId)">
+                    <span nz-icon nz-tooltip nzTooltipTitle="Copy SOE ID" nzType="copy" nzTheme="outline"></span>
+                </button>
+                <button class="mr-8" *ngIf="bbContributionUrl && data.soeId" nz-button nzType="default" (click)="viewBbContribution(data.soeId)">
+                    <span nz-icon nz-tooltip nzTooltipTitle="View code delivery" nzType="code" nzTheme="outline"></span>
+                </button>
+                <span>{{data.soeId}}</span>
+            </td>
+            <td>
+                <button class="mr-8" *ngIf="data.soeId" nz-button nzType="default" (click)="openTeamsWindow(data.soeId)">
+                    <span nz-icon nz-tooltip nzTooltipTitle="Chat in Teams" nzType="message"
+                        nzTheme="outline"></span>
+                </button>
+                <button class="mr-8" *ngIf="data.soeId" nz-button nzType="default" (click)="openMailBox(data.soeId, data.name)">
+                    <span nz-icon nz-tooltip nzTooltipTitle="Send an Email" nzType="mail" nzTheme="outline"></span>
+                </button>
+                <button class="mr-8" nz-button nzType="default" (click)="copyString(data.name)">
+                    <span nz-icon nz-tooltip nzTooltipTitle="Copy Name" nzType="copy"
+                        nzTheme="outline"></span>
+                </button>
+                <span>{{data.name}}</span>
+            </td>
+            <td>
+                <button class="mr-8" nz-button nzType="default" (click)="viewTeamInfo(data.team)">
+                    <span nz-icon nz-tooltip nzTooltipTitle="View Team Info" nzType="info-circle" nzTheme="outline"></span>
+                </button>
+                <button class="mr-8" nz-button nzType="default" (click)="viewTeamMembers(data.team)">
+                    <span nz-icon nz-tooltip nzTooltipTitle="View team members" nzType="ordered-list" nzTheme="outline"></span>
+                </button>
+                <span>{{data.teamName}}</span>
+            </td>
+            <td>{{data.locationName}}</td>
+            <td><pre class="pre-label-font pre-label-breakline">{{data.remark}}</pre></td>
+            <td>
+                <nz-space>
+                    <button *nzSpaceItem nz-button nzType="default" (click)="openPersonEditDrawer(data.id)">
+                        <span nz-icon nzType="edit" nzTheme="outline"></span>
+                    </button>
+                    <button *nzSpaceItem nz-button nzDanger nz-popconfirm
+                        nzPopconfirmTitle="Are you sure delete this person?" (nzOnConfirm)="deletePerson(data.id)"
+                        nzPopconfirmPlacement>
+                        <span nz-icon nzType="delete" nzTheme="outline"></span>
+                    </button>
+                </nz-space>
+            </td>
+        </tr>
+    </tbody>
+</nz-table>
+
+
+<!-- person edit drawer start -->
+<nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" [nzMaskClosable]="true" [nzWidth]="editDrawerWidth"
+    [nzVisible]="personAddOrEditDrawerVisible" [nzTitle]="addOrEditMode === 'Edit' ? 'Edit Person Details' : 'Add a Person'" [nzFooter]="footerTpl"
+    (nzOnClose)="closePersonAddOrEditDrawer()">
+
+    <form nz-form *nzDrawerContent nzLayout="vertical" [formGroup]="validatePersonForm">
+        <div class="api-details-div">
+            <nz-form-item>
+                <nz-form-label>SOE ID</nz-form-label>
+                <nz-form-control nzErrorTip="SOE ID is required">
+                    <input nz-input formControlName="soeId" placeholder="SOE ID" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label>Name</nz-form-label>
+                <nz-form-control nzErrorTip="Person name is required">
+                    <input nz-input formControlName="name" placeholder="Input person name" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label>Birthday</nz-form-label>
+                <nz-form-control>
+                    <nz-cascader formControlName="birthday" [nzExpandTrigger]="'hover'" [nzOptions]="birthdayOptions"></nz-cascader>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label>Belongs to Team</nz-form-label>
+                <nz-form-control>
+                    <nz-select nzShowSearch nzAllowClear formControlName="team">
+                        <nz-option *ngFor="let team of teams" [nzValue]="team.id" [nzLabel]="team.name"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label>Location</nz-form-label>
+                <nz-form-control>
+                    <nz-select nzShowSearch nzAllowClear formControlName="location">
+                        <nz-option *ngFor="let location of locations" [nzValue]="location.id" [nzLabel]="location.name"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label>Remark</nz-form-label>
+                <nz-form-control>
+                    <textarea nz-input formControlName="remark"
+                        placeholder="Input remark of this person" nzAutosize></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </form>
+
+    <ng-template #footerTpl>
+        <div style="float: right">
+            <button nz-button style="margin-right: 8px;" (click)="closePersonAddOrEditDrawer()">Cancel</button>
+            <button nz-button nzType="primary" [disabled]="!validatePersonForm.valid"
+                (click)="submitPersonForm()">Submit</button>
+        </div>
+    </ng-template>
+</nz-drawer>
+<!-- person edit drawer end -->

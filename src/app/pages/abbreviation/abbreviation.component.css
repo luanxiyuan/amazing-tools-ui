@@ -1,0 +1,32 @@
+.logo {
+    width: 100%;
+    height: 60px;
+    float: left;
+    font-size: 20px;
+    color: #fff;
+}
+
+.max-height-1000 {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sub-logo-title {
+    font-size: 15px;
+}
+
+[nz-menu] {
+    line-height: 64px;
+}
+
+nz-content {
+    padding: 0 50px 50px 50px;
+}
+
+nz-footer {
+    text-align: center;
+}
+
+.container-out {
+    min-height: 100%;
+}

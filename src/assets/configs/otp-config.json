@@ -1,0 +1,12 @@
+{
+    "otpSplunkBaseUrl": "https://splunk-search-sw-dev.nam.nsroot.net:8000/en-US/app/search/search",
+    "latestPeriod": "-15m",
+    "markets": {
+        "HK": "HK",
+        "SG": "SG",
+        "AE": "UAE",
+        "AU": "AU",
+        "UK": "UK",
+        "PL": "PL"
+    }
+}

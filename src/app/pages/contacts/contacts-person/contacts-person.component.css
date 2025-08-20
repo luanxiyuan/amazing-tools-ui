@@ -1,0 +1,24 @@
+.search-form {
+    border-bottom: 1px solid darkgrey;
+}
+
+.operation-column {
+    width: 80px;
+}
+
+.certain-search-item-count {
+    position: absolute;
+    color: #999;
+    right: 16px;
+}
+
+.floating-div {
+    position: fixed;
+    top: 85px;
+    right: 20px;
+    display: none;
+}
+
+.floating-div.show {
+    display: block;
+}

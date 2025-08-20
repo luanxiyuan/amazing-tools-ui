@@ -1,0 +1,32 @@
+<nz-layout class="layout">
+    <nz-header class="ui-maker-header">
+        <div class="logo-text">Odyssey X - UI</div>
+        <nz-select class="dropdown-list" nzShowSearch nzPlaceHolder="Select an Application"
+            (ngModelChange)="applicationChange($event)" [(ngModel)]="selectedApplicationId"
+            [nzStatus]="applicationSelectStatus">
+            <nz-option *ngFor="let app of applications" [nzValue]="app.id" [nzLabel]="app.name"
+                [attr.selected]="selectedApplicationId == app.id"></nz-option>
+        </nz-select>
+        <nz-select class="dropdown-list" nzShowSearch nzPlaceHolder="Select a Module"
+            (ngModelChange)="moduleChange($event)" [(ngModel)]="selectedModuleId"
+            [nzStatus]="moduleSelectStatus">
+            <nz-option *ngFor="let module of modules" [nzValue]="module.id" [nzLabel]="module.name"
+                [attr.selected]="selectedModuleId == module.id"></nz-option>
+        </nz-select>
+        <nz-select class="dropdown-list" nzShowSearch nzPlaceHolder="Select a Function"
+            (ngModelChange)="functionChange($event)" [(ngModel)]="selectedFunctionId" [nzDropdownMatchSelectWidth]="false"
+            [nzStatus]="functionSelectStatus">
+            <nz-option *ngFor="let fun of functions" [nzValue]="fun.id" [nzLabel]="fun.name"
+                [attr.selected]="selectedFunctionId == fun.id"></nz-option>
+        </nz-select>
+    </nz-header>
+
+    <div class="ui-marker-body">
+        <router-outlet></router-outlet>
+    </div>
+
+    <nz-footer></nz-footer>
+
+    <app-loading-spinner [size]="'large'"></app-loading-spinner>
+    
+</nz-layout>

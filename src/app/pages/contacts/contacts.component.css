@@ -1,0 +1,44 @@
+.logo {
+    width: 200px;
+    height: 31px;
+    float: left;
+    font-size: 20px;
+    color: #fff;
+}
+
+.notification {
+    color: #fff;
+    font-size: 20px;
+}
+
+[nz-menu] {
+    line-height: 64px;
+}
+
+nz-content {
+    padding: 0 50px 50px 50px;
+}
+
+nz-footer {
+    text-align: center;
+}
+
+.inner-content {
+    background: #fff;
+    padding: 24px;
+    min-height: 280px;
+    height: 100%;
+    margin-top: 20px;
+}
+
+.container-out {
+    min-height: 100%;
+}
+
+.upcoming-birthday-div {
+    border: 1px darkgray solid;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 15px;
+}

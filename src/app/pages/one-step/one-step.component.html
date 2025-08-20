@@ -1,0 +1,85 @@
+<nz-layout class="layout">
+    <nz-header class="query-card-info-header">
+        <div class="logo-text">One Step</div>
+    </nz-header>
+
+    <div class="query-card-info-body">
+        <div>
+            <span class="view-type-tab">
+                <button nz-button nzType="default" (click)="reloadPortStatus()">
+                    <span nz-icon nzType="reload" nzTheme="outline"></span>Refresh
+                </button>
+            </span>
+            <span class="view-type-tab">
+                <nz-segmented [nzOptions]="osTypeOptions" (nzValueChange)="filterByOsType()" [(ngModel)]="currentOsType"></nz-segmented>
+            </span>
+
+            <nz-content>
+                <div class="inner-content">
+                    <nz-table [nzData]="displayCommandSets" nzShowPagination="false">
+                        <thead>
+                            <tr>
+                                <th class="w-50">#</th>
+                                <th class="w-300">One Step Name</th>
+                                <th class="w-150">Port</th>
+                                <th class="w-150">OS Platform</th>
+                                <th class="w-250">Command</th>
+                                <th class="w-150">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let commandSet of displayCommandSets; let i = index">
+                                <td>{{i + 1}}</td>
+                                <td>{{ commandSet.name }}</td>
+                                <td>
+                                    <div *ngIf="commandSet.ports && commandSet.ports.length > 0">
+                                        <div *ngFor="let portSt of commandSet.portStatus">{{ portSt.port }}
+                                            <nz-tag *ngIf="portSt.isInUseFlag" nzColor="#87d068">Running</nz-tag>
+                                            <nz-tag *ngIf="!portSt.isInUseFlag" nzColor="#ff7f50">Not Started</nz-tag>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>{{ commandSet.osType }}</td>
+                                <td>
+                                    <nz-collapse nzGhost>
+                                        <nz-collapse-panel [nzHeader]="commandSet.commandFile" [nzActive]="false">
+                                            <div class="command-line" *ngFor="let command of commandSet.commands">{{ command }}
+                                                <span class="dislay-when-hover" nz-icon nz-tooltip nzTooltipTitle="Copy this command" nzType="copy" 
+                                                nzTheme="outline" (click)="copyString(command)"></span>
+                                            </div>
+                                        </nz-collapse-panel>
+                                    </nz-collapse>
+                                </td>
+                                <td>
+                                    <button *ngIf="backendOsType == currentOsType" nz-button nzType="primary" nz-tooltip nzTooltipTitle="Run this command" (click)="executeCommandSet(commandSet)">
+                                        <span nz-icon nzType="play-circle" nzTheme="outline"></span>
+                                    </button>
+                                    <button *ngIf="commandSet.ports && commandSet.ports.length > 0" class="ml-5" nz-button nzType="default" nz-tooltip nzTooltipTitle="Stop the process" (click)="stopProcess(commandSet)">
+                                        <span nz-icon nzType="stop" nzTheme="outline"></span>
+                                    </button>
+                                    <button *ngIf="commandSet.ports && commandSet.ports.length > 0" class="ml-5" nz-button nzType="default" nz-tooltip nzTooltipTitle="View the execution" (click)="viewExecutionLog(commandSet)">
+                                        <span nz-icon nzType="folder-view" nzTheme="outline"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </nz-table>
+                </div>
+            </nz-content>
+        </div>
+    </div>
+
+</nz-layout>
+
+<app-loading-spinner [size]="'large'"></app-loading-spinner>
+
+<nz-modal [(nzVisible)]="isExecLogPopupVisible" nzTitle="Execution Log" (nzOnCancel)="closeExecLogPopup()" (nzOnOk)="closeExecLogPopup()"
+    [nzWidth]="1000" nzMaskClosable="true"
+    [nzCancelText]="null" [nzClosable]="true"
+    [nzBodyStyle]="{ height: '75vh', overflow: 'auto' }">
+    <ng-container *nzModalContent>
+        <pre id="exec-log-pre" class="pre-label-font pre-label-breakline">
+            {{ execLog }}
+        </pre>
+    </ng-container>
+</nz-modal>

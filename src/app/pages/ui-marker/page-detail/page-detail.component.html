@@ -1,0 +1,705 @@
+<nz-content>
+    <div class="inner-content content-body scroll-body">
+        <nz-space nzDirection="vertical">
+            <nz-page-header class="mb-15" [nzGhost]="false" [nzBackIcon]="backIconTemplate">
+                <nz-page-header-title>Page Details</nz-page-header-title>
+                <nz-page-header-subtitle></nz-page-header-subtitle>
+                <nz-page-header-extra>
+                        <button class="ml-5" nz-button nz-popover nzType="default" nzPopoverTitle="HOW TO:" [nzPopoverContent]="tipsTemplate">
+                            <span nz-icon nzType="question"></span>
+                        </button>
+                        <ng-template #tipsTemplate>
+                            <div *ngIf="markerEditable">
+                                <p><strong>Add a Marker:</strong> Click and drag on the image below to mark.</p>
+                                <p><strong>Resize a Marker:</strong> Drag the border of the marker.</p>
+                            </div>
+                            <div *ngIf="!markerEditable">
+                                <p><strong>How to use:</strong> Click the rectangle to view the details.</p>
+                            </div>
+                        </ng-template>
+                        <button class="ml-5" nz-button nzType="default" (click)="previewUI()" nz-tooltip nzTooltipTitle="Preview the Image">
+                            <span nz-icon nzType="fullscreen"></span>
+                        </button>
+                        <button class="ml-5" *ngIf="markerEditable" nz-button nzType="default" (click)="replaceUI()" nz-tooltip nzTooltipTitle="Upload a new Image to replace current one">
+                            <span nz-icon nzType="upload"></span>
+                        </button>
+                        <button class="ml-5" nz-button nzType="primary" (click)="pageInformation()" nz-tooltip nzTooltipTitle="View API details and other supplements">Page Information</button>
+                        <!-- <button *nzSpaceItem nz-button nzType="primary" (click)="saveMarkerDetails()">Save Marked Details</button> -->
+                </nz-page-header-extra>
+            </nz-page-header>
+            <ng-template #backIconTemplate>
+                <button nz-button nzType="default" (click)="backToListingPage()">
+                    <span nz-icon nzType="arrow-left" nzTheme="outline"></span>
+                </button>
+            </ng-template>
+
+            <div *nzSpaceItem nz-row [nzGutter]="8">
+                <div nz-col nzSpan="24" class="float-left">
+                    <canvas id="canvas"></canvas>
+                    <div class="popup" [ngStyle]="{'left.px': markerPopupLeft, 'top.px': markerPopupTop}" *ngIf="showMarkerPopupFlag">
+                        <button class="mr-5" *ngIf="markerEditable" nz-button nzType="dashed" nzDanger nz-popconfirm
+                            nzPopconfirmTitle="Do you want to remove this marker and its details?" (nzOnConfirm)="removeMarkerRectangle()"
+                            nzPopconfirmPlacement>
+                            <span nz-icon nzType="delete"></span>
+                        </button>
+                        <button nz-button nz-tooltip nzTooltipTitle="View Details" nzType="primary" (click)="showMarkerDetails()">
+                            <span nz-icon nzType="eye"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nz-space>
+    </div>
+</nz-content>
+
+<!-- element edit drawer start -->
+<nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" 
+        [nzMaskClosable]="true" 
+        [nzWidth]="editDrawerWidth" 
+        [nzVisible]="elementEditDrawerVisible"
+        nzTitle="Input Comments of this UI Element" 
+        [nzFooter]="footerTpl"
+        [nzExtra]="switchToViewBtn"
+        (nzOnClose)="closeEditDrawer()">
+
+    <ng-template #switchToViewBtn>
+        <button *ngIf="sharedStoreService.elementFormViewable$ | async" nz-button nzType="primary" (click)="goToElementViewMode()">View Marker Details</button>
+    </ng-template>
+    
+    <form nz-form *nzDrawerContent [formGroup]="validateElementForm">
+        <div nz-row [nzGutter]="8">
+            <div nz-col nzSpan="24">
+                <nz-divider nzOrientation="left" nzText="CTA and Open API Details"></nz-divider>
+            </div>
+        </div>
+
+        <div class="api-details-view-div" *ngFor="let control of elementFormListOfControl; let i = index;">
+            <div nz-row class="api-details-div" [nzGutter]="8">
+                <!-- API cta and uri start -->
+                <div nz-col nzSpan="7">
+                    <nz-form-item>
+                        <nz-form-label [nzFor]="control.ctaControlInstance"><span class="fc-red">*</span>When element</nz-form-label>
+
+                        <nz-form-control nzErrorTip="Please select CTA">
+                            <nz-select nzShowSearch nzPlaceHolder="Select CTA" [attr.id]="control.ctaId" [formControlName]="control.ctaControlInstance">
+                                <nz-option *ngFor="let ctaType of elementCtaTypes" [nzLabel]="ctaType" [nzValue]="ctaType"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="17">
+                    <nz-form-item>
+                        <nz-form-label [nzFor]="control.conditionControlInstance">with condition</nz-form-label>
+
+                        <nz-form-control nzErrorTip="Input condition here">
+                            <input nz-input placeholder="Input the condition here" [attr.id]="control.conditionId" [formControlName]="control.conditionControlInstance"/>
+                        </nz-form-control>
+
+                        <button nz-button nzDanger nzType="dashed" class="ml-5" nz-popconfirm nzPopconfirmTitle="Are you sure to remove this API record?" 
+                        (nzOnConfirm)="removeElementApiRecord(control)">
+                            <span nz-icon nzType="delete"></span>
+                        </button>
+                    </nz-form-item>
+                </div>
+
+                <div nz-col nzSpan="17" class="pt-7">
+                    <nz-form-item>
+                        <nz-form-label [nzFor]="control.uriControlInstance"><span class="fc-red">*</span>Trigger API</nz-form-label>
+
+                        <nz-form-control nzErrorTip="Please input URI">
+                            <input nz-input placeholder="Input the URI here" [attr.id]="control.uriId" [nzAutocomplete]="uriAutoComplete" (ngModelChange)="onSearchSubApiInputChange($event)" [formControlName]="control.uriControlInstance"/>
+                        </nz-form-control>
+                        <nz-autocomplete #uriAutoComplete [nzWidth]="832">
+                            <ng-container *ngFor="let groupApis of groupedSearchApiMatchOptions | keyvalue">
+                                <nz-auto-optgroup [nzLabel]="groupApis.key">
+                                    <nz-auto-option *ngFor="let api of groupApis.value" [nzLabel]="api.uri" [nzValue]="api.uri">
+                                        <nz-tag [nzColor]="api.belongsToApplication | applicationColor">{{api.belongsToApplication || 'NA'}}</nz-tag>
+                                        <nz-tag [nzColor]="api.classification | apiClassificationColor">{{api.classification || 'NA'}}</nz-tag>
+                                        <nz-tag [nzColor]="api.httpMethod | httpMethodColor">{{api.httpMethod || 'NA'}}</nz-tag>
+                                        {{api.uri}}
+                                    </nz-auto-option>
+                                </nz-auto-optgroup>
+                            </ng-container>
+                        </nz-autocomplete>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="7" class="pt-7">
+                    <nz-form-item>
+                        <nz-form-label [nzFor]="control.methodControlInstance"><span class="fc-red">*</span>with method</nz-form-label>
+
+                        <nz-form-control nzErrorTip="Please select Http Method">
+                            <nz-select nzShowSearch nzPlaceHolder="Http Method" [attr.id]="control.methodId" [formControlName]="control.methodControlInstance">
+                                <nz-option *ngFor="let method of httpMethods" [nzLabel]="method" [nzValue]="method"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <!-- API cta and uri end -->
+
+                <!-- sample req and res start -->
+                <div nz-col nzSpan="12">
+                    <nz-form-label [nzFor]="control.sampleReqControlInstance">Sample Request</nz-form-label>
+
+                    <nz-form-control>
+                        <textarea nz-input nzBlock [attr.id]="control.sampleReqId" [formControlName]="control.sampleReqControlInstance" placeholder="please enter sample request here..."
+                            [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
+                    </nz-form-control>
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-label [nzFor]="control.sampleResControlInstance">Sample Response</nz-form-label>
+
+                    <nz-form-control>
+                        <textarea nz-input nzBlock [attr.id]="control.sampleResId" [formControlName]="control.sampleResControlInstance" placeholder="please enter sample response here..."
+                            [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
+                    </nz-form-control>
+                </div>
+                <!-- sample req and res end -->
+
+
+                <!-- Comments start -->
+                <div nz-col nzSpan="24">
+                    <nz-form-label [nzFor]="control.commentsControlInstance">Comments</nz-form-label>
+
+                    <nz-form-control>
+                        <textarea nz-input nzBlock [attr.id]="control.commentsId" [formControlName]="control.commentsControlInstance" placeholder="please enter Comments here..."
+                            [nzAutosize]="{ minRows: 1, maxRows: 4 }"></textarea>
+                    </nz-form-control>
+                </div>
+                <!-- Comments end -->
+            </div>
+        </div>
+
+        <div nz-row [nzGutter]="8">
+            <div nz-col nzSpan="24">
+                <nz-form-item>
+                    <nz-form-control>
+                        <button nz-button nzBlock nzType="dashed" (click)="addElementFormApiRecords()" class="add-api-btn">
+                            Add a New API
+                        </button>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-row [nzGutter]="8" class="mt-10">
+            <div nz-col nzSpan="24">
+                <nz-divider nzOrientation="left" nzText="Other Supplements"></nz-divider>
+            </div>
+        </div>
+        <div nz-row [nzGutter]="8">
+            <div nz-col nzSpan="24">
+                <nz-form-item>
+                    <nz-form-control>
+                        <textarea nz-input id="id-other-supp-txtarea" formControlName="other-supp-txtarea" placeholder="please enter anything about this UI element here..."
+                            [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+
+    <ng-template #footerTpl>
+        <div style="float: right">
+            <button nz-button style="margin-right: 8px;" (click)="closeEditDrawer()">Cancel</button>
+            <button nz-button nzType="primary" [disabled]="!validateElementForm.valid" (click)="submitElementForm()">Submit</button>
+        </div>
+    </ng-template>
+</nz-drawer>
+<!-- element edit drawer end -->
+
+<!-- element view drawer start -->
+<nz-drawer
+    [nzBodyStyle]="{ overflow: 'auto' }" 
+    [nzMaskClosable]="true" 
+    [nzWidth]="viewDrawerWidth" 
+    [nzVisible]="elementViewDrawerVisible"
+    [nzExtra]="switchToEditBtn"
+    nzTitle="View Comments of this UI Element" 
+    (nzOnClose)="closeViewDrawer()">
+
+    <ng-container *nzDrawerContent>
+        <div nz-row [nzGutter]="8">
+            <div nz-col nzSpan="24">
+                <nz-divider nzOrientation="left" nzText="CTA and Open API Details"></nz-divider>
+                <div class="api-details-view-div" *ngIf="!elementFormDataForView || !elementFormDataForView.apiFormDetails || elementFormDataForView.apiFormDetails.length == 0">No CTA and Open API Details</div>
+
+                <div class="api-details-view-div" *ngFor="let apiDetail of elementFormDataForView.apiFormDetails">
+                    <div [id]="apiDetail.uriValue + '_' + apiDetail.methodValue">
+                        When it's <nz-tag [nzColor]="apiDetail.ctaValue | apiCtaColor">{{apiDetail.ctaValue}}</nz-tag>
+                        <span *ngIf="apiDetail.conditionValue">
+                            with condition <nz-tag nzColor="default">{{apiDetail.conditionValue}}</nz-tag>
+                        </span>
+                        Trigger API
+                        <a class="pl-4 pr-4" nz-button nzType="link" (click)="openApiLink(apiDetail.uriValue, apiDetail.methodValue)">{{apiDetail.uriValue}}</a>
+                        <span *ngIf="apiDetail.methodValue">
+                            with method <nz-tag nzColor="default">{{apiDetail.methodValue}}</nz-tag>
+                        </span>
+                        <button class="top-right-button" nz-button nzType="primary" nzShape="circle" nz-popover nzPopoverTitle="More Actions" [nzPopoverContent]="moreActionTemp">
+                            <span nz-icon nzType="more"></span>
+                        </button>
+                        <ng-template #moreActionTemp>
+                            <button nz-button nzType="default" (click)="copyToClipboard(apiDetail.uriValue)">
+                                <span nz-icon nzType="copy"></span>
+                                Copy this URI
+                            </button>
+                            <button *ngIf="channelList.includes(selectedApplicationId)" class="ml-10" nz-button nzType="default" (click)="openSearchDialog(apiDetail)">
+                                <span nz-icon nzType="link"></span>
+                                Splunk Log Search
+                            </button>
+                        </ng-template>
+                    </div>
+                    <div>
+                        <nz-collapse nzGhost>
+                            <nz-collapse-panel nzHeader="Sample Request" nzActive="false" [ngStyle]="pannelStyle">
+                                <div class="sampleReqResDiv" *ngIf="apiDetail.sampleReqValue" nz-row [nzGutter]="8">
+                                    <div nz-col nzSpan="22">
+                                        <pre class="pre-label-font pre-label-breakline">{{apiDetail.sampleReqValue}}</pre>
+                                    </div>
+                                    <div nz-col nzSpan="2">
+                                        <button nz-button nzSize="small" nzType="default" (click)="copyToClipboard(apiDetail.sampleReqValue)">Copy</button>
+                                    </div>
+                                </div>
+                                
+                                <div *ngIf="!apiDetail.sampleReqValue">No Sample Request</div>
+                            </nz-collapse-panel>
+
+                            <nz-collapse-panel nzHeader="Sample Response" nzActive="false" [ngStyle]="pannelStyle">
+                                <div class="sampleReqResDiv" *ngIf="apiDetail.sampleResValue" nz-row [nzGutter]="8">
+                                    <div nz-col nzSpan="22">
+                                        <pre class="pre-label-font pre-label-breakline">{{apiDetail.sampleResValue}}</pre>
+                                    </div>
+                                    <div nz-col nzSpan="2">
+                                        <button nz-button nzSize="small" nzType="default" (click)="copyToClipboard(apiDetail.sampleResValue)">Copy</button>
+                                    </div>
+                                </div>
+                                
+                                <div *ngIf="!apiDetail.sampleResValue">No Sample Response</div>
+                            </nz-collapse-panel>
+
+                            <nz-collapse-panel *ngIf="apiDetail.commentsValue" nzHeader="Comments" nzActive="true" [ngStyle]="pannelStyle">
+                                <div nz-row [nzGutter]="8">
+                                    <div nz-col nzSpan="24">
+                                        <pre class="pre-label-font pre-label-breakline">{{apiDetail.commentsValue}}</pre>
+                                    </div>
+                                </div>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                    </div>
+                </div>
+
+                <nz-divider nzOrientation="left" nzText="Other Supplements"></nz-divider>
+                <div class="api-details-view-div">
+                    <pre class="pre-label-font pre-label-breakline">{{elementFormDataForView.otherSuppTextArea ? elementFormDataForView.otherSuppTextArea : 'No Other Supplements'}}</pre>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</nz-drawer>
+<ng-template #switchToEditBtn>
+    <button *ngIf="markerEditable" nz-button nzType="primary" (click)="goToElementEditMode()">Edit Marker Details</button>
+</ng-template>
+<!-- element view drawer end -->
+
+
+<!-- page edit drawer start -->
+<nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" 
+        [nzMaskClosable]="true" 
+        [nzWidth]="editDrawerWidth" 
+        [nzVisible]="pageEditDrawerVisible"
+        nzTitle="Input Comments for This Page" 
+        [nzFooter]="pageDrawerFooterTpl" 
+        [nzExtra]="switchToPageViewBtn"
+        (nzOnClose)="closePageEditDrawer()">
+
+    <ng-template #switchToPageViewBtn>
+        <button *ngIf="sharedStoreService.pageFormViewable$ | async" nz-button nzType="primary" (click)="goToPageViewMode()">View Page Details</button>
+    </ng-template>
+    
+    <form nz-form *nzDrawerContent [formGroup]="validatePageForm">
+        <div nz-row [nzGutter]="8" class="mb-15">
+            <div nz-col nzSpan="24">
+                <nz-form-item>
+                    <nz-form-label nzFor="page-desc">Page Description</nz-form-label>
+                    <nz-form-control>
+                        <input nz-input placeholder="Input page description, then you can find it easily" id="id-page-desc" formControlName="page-desc"/>
+                    </nz-form-control>
+                </nz-form-item>
+                <nz-form-item class="pt-7">
+                    <nz-form-label nzFor="page-view-type">Page View Type</nz-form-label>
+                    <nz-form-control>
+                        <nz-radio-group id="id-page-view-type" formControlName="page-view-type">
+                            <label nz-radio-button *ngFor="let viewType of pageViewTypes" [nzValue]="viewType">{{viewType}}</label>
+                        </nz-radio-group>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item *ngIf="applicationScopeType === scopeTypeRegion" class="pt-7">
+                    <nz-form-label nzFor="region">Region</nz-form-label>
+                    <nz-form-control>
+                        <nz-radio-group id="id-region" formControlName="scope-value">
+                            <label nz-radio-button *ngFor="let region of applicationRegions" [nzValue]="region">{{region}}</label>
+                        </nz-radio-group>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item *ngIf="applicationScopeType === scopeTypeMarket" class="pt-7">
+                    <nz-form-label nzFor="market">Market</nz-form-label>
+                    <nz-form-control>
+                        <nz-radio-group id="id-market" formControlName="scope-value">
+                            <label nz-radio-button *ngFor="let market of applicationMarkets" [nzValue]="market">{{market}}</label>
+                        </nz-radio-group>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-row [nzGutter]="8">
+            <div nz-col nzSpan="24">
+                <nz-divider nzOrientation="left" nzText="CTA and Open API Details"></nz-divider>
+            </div>
+        </div>
+
+        <div class="api-details-view-div" *ngFor="let control of pageFormListOfControl; let i = index;">
+            <div nz-row [nzGutter]="8">
+                <!-- API cta and uri start -->
+                <div nz-col nzSpan="7">
+                    <nz-form-item>
+                        <nz-form-label [nzFor]="control.ctaControlInstance"><span class="fc-red">*</span>When page</nz-form-label>
+
+                        <nz-form-control nzErrorTip="Please select CTA">
+                            <nz-select nzShowSearch nzPlaceHolder="Select CTA" [attr.id]="control.ctaId" [formControlName]="control.ctaControlInstance">
+                                <nz-option *ngFor="let ctaType of pageCtaTypes" [nzLabel]="ctaType" [nzValue]="ctaType"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="17">
+                    <nz-form-item>
+                        <nz-form-label [nzFor]="control.conditionControlInstance">with condition</nz-form-label>
+
+                        <nz-form-control nzErrorTip="Input condition here">
+                            <input nz-input placeholder="Input the condition here" [attr.id]="control.conditionId" [formControlName]="control.conditionControlInstance"/>
+                        </nz-form-control>
+
+                        <button nz-button nzDanger nzType="dashed" class="ml-5" nz-popconfirm nzPopconfirmTitle="Are you sure to remove this API record?" 
+                        (nzOnConfirm)="removePageApiRecord(control)">
+                            <span nz-icon nzType="delete"></span>
+                        </button>
+                    </nz-form-item>
+                </div>
+
+                <div nz-col nzSpan="17" class="pt-7">
+                    <nz-form-item>
+                        <nz-form-label [nzFor]="control.uriControlInstance"><span class="fc-red">*</span>Trigger API</nz-form-label>
+
+                        <nz-form-control nzErrorTip="Please input URI">
+                            <input nz-input placeholder="Input the URI here" [attr.id]="control.uriId" [formControlName]="control.uriControlInstance" [nzAutocomplete]="uriAutoComplete" (ngModelChange)="onSearchSubApiInputChange($event)"/>
+                        </nz-form-control>
+                        <nz-autocomplete #uriAutoComplete [nzWidth]="832">
+                            <ng-container *ngFor="let groupApis of groupedSearchApiMatchOptions | keyvalue">
+                                <nz-auto-optgroup [nzLabel]="groupApis.key">
+                                    <nz-auto-option *ngFor="let api of groupApis.value" [nzLabel]="api.uri" [nzValue]="api.uri">
+                                        <nz-tag [nzColor]="api.belongsToApplication | applicationColor">{{api.belongsToApplication || 'NA'}}</nz-tag>
+                                        <nz-tag [nzColor]="api.classification | apiClassificationColor">{{api.classification || 'NA'}}</nz-tag>
+                                        <nz-tag [nzColor]="api.httpMethod | httpMethodColor">{{api.httpMethod || 'NA'}}</nz-tag>
+                                        {{api.uri}}
+                                    </nz-auto-option>
+                                </nz-auto-optgroup>
+                            </ng-container>
+                        </nz-autocomplete>
+                    </nz-form-item>
+                </div>
+                <div nz-col nzSpan="7" class="pt-7">
+                    <nz-form-item>
+                        <nz-form-label [nzFor]="control.methodControlInstance"><span class="fc-red">*</span>with method</nz-form-label>
+
+                        <nz-form-control nzErrorTip="Please select Http Method">
+                            <nz-select nzShowSearch nzPlaceHolder="Http Method" [attr.id]="control.methodId" [formControlName]="control.methodControlInstance">
+                                <nz-option *ngFor="let method of httpMethods" [nzLabel]="method" [nzValue]="method"></nz-option>
+                            </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <!-- API cta and uri end -->
+
+                <!-- sample req and res start -->
+                <div nz-col nzSpan="12">
+                    <nz-form-label [nzFor]="control.sampleReqControlInstance">Sample Request</nz-form-label>
+
+                    <nz-form-control>
+                        <textarea nz-input nzBlock [attr.id]="control.sampleReqId" [formControlName]="control.sampleReqControlInstance" placeholder="please enter sample request here..."
+                            [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
+                    </nz-form-control>
+                </div>
+                <div nz-col nzSpan="12">
+                    <nz-form-label [nzFor]="control.sampleResControlInstance">Sample Response</nz-form-label>
+
+                    <nz-form-control>
+                        <textarea nz-input nzBlock [attr.id]="control.sampleResId" [formControlName]="control.sampleResControlInstance" placeholder="please enter sample response here..."
+                            [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
+                    </nz-form-control>
+                </div>
+                <!-- sample req and res end -->
+
+                <!-- Comments start -->
+                <div nz-col nzSpan="24">
+                    <nz-form-label [nzFor]="control.commentsControlInstance">Comments</nz-form-label>
+
+                    <nz-form-control>
+                        <textarea nz-input nzBlock [attr.id]="control.commentsId" [formControlName]="control.commentsControlInstance" placeholder="please enter Comments here..."
+                            [nzAutosize]="{ minRows: 1, maxRows: 4 }"></textarea>
+                    </nz-form-control>
+                </div>
+                <!-- Comments end -->
+            </div>
+        </div>
+
+        <div nz-row [nzGutter]="8">
+            <div nz-col nzSpan="24">
+                <nz-form-item>
+                    <nz-form-control>
+                        <button nz-button nzBlock nzType="dashed" (click)="addPageFormApiRecords()">
+                            Add a New API
+                        </button>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+
+        <div nz-row [nzGutter]="8" class="mt-10">
+            <div nz-col nzSpan="24">
+                <nz-divider nzOrientation="left" nzText="Other Supplements"></nz-divider>
+            </div>
+        </div>
+        <div nz-row [nzGutter]="8">
+            <div nz-col nzSpan="24">
+                <nz-form-item>
+                    <nz-form-control>
+                        <textarea nz-input id="id-page-other-supp-txtarea" formControlName="page-other-supp-txtarea" placeholder="please enter anything about this UI element here..."
+                            [nzAutosize]="{ minRows: 4, maxRows: 6 }"></textarea>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </div>
+    </form>
+
+    <ng-template #pageDrawerFooterTpl>
+        <div style="float: right">
+            <button nz-button style="margin-right: 8px;" (click)="closePageEditDrawer()">Cancel</button>
+            <button nz-button nzType="primary" [disabled]="!validatePageForm.valid" (click)="submitPageForm()">Submit</button>
+        </div>
+    </ng-template>
+</nz-drawer>
+<!-- page edit drawer end -->
+
+<!-- page view drawer start -->
+<nz-drawer
+    [nzBodyStyle]="{ overflow: 'auto' }" 
+    [nzMaskClosable]="true" 
+    [nzWidth]="viewDrawerWidth" 
+    [nzVisible]="pageViewDrawerVisible"
+    [nzExtra]="switchToPageEditBtn"
+    nzTitle="View Comments of this Page" 
+    (nzOnClose)="closePageViewDrawer()">
+
+    <ng-container *nzDrawerContent>
+        <div *ngIf="pageFormDataForView.pageDesc" nz-row [nzGutter]="8">
+            <div nz-col nzSpan="24">
+                <h2>
+                    <span>{{pageFormDataForView.pageDesc}}</span>
+                    <span class="ml-5" *ngIf="pageFormDataForView.pageViewType"><nz-tag nzColor="#87d068">{{ pageFormDataForView.pageViewType }}</nz-tag></span>
+                    <span class="ml-5" *ngIf="pageFormDataForView.scopeValue"><nz-tag nzColor="#2db7f5">{{ pageFormDataForView.scopeValue }}</nz-tag></span>
+                </h2>
+            </div>
+        </div>
+
+        <div nz-row [nzGutter]="8">
+            <div nz-col nzSpan="24">
+                <nz-divider nzOrientation="left" nzText="CTA and Open API Details"></nz-divider>
+                <div class="api-details-view-div" *ngIf="!pageFormDataForView || !pageFormDataForView.apiFormDetails || pageFormDataForView.apiFormDetails.length == 0">No CTA and Open API Details</div>
+
+                <div class="api-details-view-div" *ngFor="let apiDetail of pageFormDataForView.apiFormDetails">
+                    <div class="w-890" [id]="apiDetail.uriValue + '_' + apiDetail.methodValue">
+                        When it's <nz-tag [nzColor]="apiDetail.ctaValue | apiCtaColor">{{apiDetail.ctaValue}}</nz-tag>
+                        <span *ngIf="apiDetail.conditionValue">
+                            with condition <nz-tag nzColor="default">{{apiDetail.conditionValue}}</nz-tag>
+                        </span>
+                        Trigger API
+                        <a class="pl-4 pr-4 break-text" nz-button nzType="link" (click)="openApiLink(apiDetail.uriValue, apiDetail.methodValue)">{{apiDetail.uriValue}}</a>
+                        <span *ngIf="apiDetail.methodValue">
+                            with method <nz-tag nzColor="default">{{apiDetail.methodValue}}</nz-tag>
+                        </span>
+                        <button class="top-right-button" nz-button nzType="primary" nzShape="circle" nz-popover nzPopoverTitle="More Actions" [nzPopoverContent]="moreActionTemp">
+                            <span nz-icon nzType="dash"></span>
+                        </button>
+                        <ng-template #moreActionTemp>
+                            <button nz-button nzType="default" (click)="copyToClipboard(apiDetail.uriValue)">
+                                <span nz-icon nzType="copy"></span>
+                                Copy this URI
+                            </button>
+                            <button *ngIf="channelList.includes(selectedApplicationId)" class="ml-10" nz-button nzType="default" (click)="openSearchDialog(apiDetail)">
+                                <span nz-icon nzType="link"></span>
+                                Splunk Log Search
+                            </button>
+                        </ng-template>
+                    </div>
+                    <div>
+                        <nz-collapse [nzBordered]="false" nzGhost>
+                            <nz-collapse-panel nzHeader="Sample Request" nzActive="false" [ngStyle]="pannelStyle">
+                                <div class="sampleReqResDiv" *ngIf="apiDetail.sampleReqValue" nz-row [nzGutter]="8">
+                                    <div nz-col nzSpan="22">
+                                        <pre class="pre-label-font pre-label-breakline">{{apiDetail.sampleReqValue}}</pre>
+                                    </div>
+                                    <div nz-col nzSpan="2">
+                                        <button nz-button nzSize="small" nzType="default" (click)="copyToClipboard(apiDetail.sampleReqValue)">Copy</button>
+                                    </div>
+                                </div>
+                                
+                                <div *ngIf="!apiDetail.sampleReqValue">No Sample Request</div>
+                            </nz-collapse-panel>
+
+                            <nz-collapse-panel nzHeader="Sample Response" nzActive="false" [ngStyle]="pannelStyle">
+                                <div class="sampleReqResDiv" *ngIf="apiDetail.sampleResValue" nz-row [nzGutter]="8">
+                                    <div nz-col nzSpan="22">
+                                        <pre class="pre-label-font pre-label-breakline">{{apiDetail.sampleResValue}}</pre>
+                                    </div>
+                                    <div nz-col nzSpan="2">
+                                        <button nz-button nzSize="small" nzType="default" (click)="copyToClipboard(apiDetail.sampleResValue)">Copy</button>
+                                    </div>
+                                </div>
+                                
+                                <div *ngIf="!apiDetail.sampleResValue">No Sample Response</div>
+                            </nz-collapse-panel>
+
+                            <nz-collapse-panel *ngIf="apiDetail.commentsValue" nzHeader="Comments" nzActive="true" [ngStyle]="pannelStyle">
+                                <div nz-row [nzGutter]="8">
+                                    <div nz-col nzSpan="24">
+                                        <pre class="pre-label-font pre-label-breakline">{{apiDetail.commentsValue}}</pre>
+                                    </div>
+                                </div>
+                            </nz-collapse-panel>
+                        </nz-collapse>
+                    </div>
+                </div>
+
+                <nz-divider nzOrientation="left" nzText="Other Supplements"></nz-divider>
+                <div class="api-details-view-div">
+                    <pre class="pre-label-font pre-label-breakline">{{pageFormDataForView.otherSuppTextArea ? pageFormDataForView.otherSuppTextArea : 'No Other Supplements'}}</pre>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</nz-drawer>
+<ng-template #switchToPageEditBtn>
+    <button *ngIf="markerEditable" nz-button nzType="primary" (click)="goToPageEditMode()">Edit Page Details</button>
+</ng-template>
+<!-- page view drawer end -->
+
+<!-- splunk search modal start -->
+<nz-modal [(nzVisible)]="showSearchDialog" nzTitle="Search Splunk Log" (nzOnCancel)="closeSearchDialog()" (nzOnOk)="searchLog()"
+    [nzBodyStyle]="{ overflow: 'auto' }" [nzWidth]="800">
+    <ng-container *nzModalContent>
+        <nz-alert nzType="warning" nzMessage="Reminder: The premise is that you have permission to get logs in splunk."></nz-alert>
+
+        <!-- channel -->
+        <div class="mt-20">
+            <span>Channel: </span>
+            <span>
+                <nz-radio-group class="ml-5" [(ngModel)]="filterData.selectedChannelId" (ngModelChange)="changeChannel()">
+                    <label *ngFor="let channelItem of channelList" nz-radio-button [nzValue]="channelItem">{{channelItem}}</label>
+                </nz-radio-group>
+            </span>
+        </div>
+
+        <!-- environment -->
+        <div class="mt-20">
+            <span>Environment: </span>
+            <span>
+                <nz-radio-group class="ml-5" [(ngModel)]="filterData.selectedEnvironmentId">
+                    <label *ngFor="let envItem of environmentList" nz-radio-button [nzValue]="envItem.value">{{envItem.label}}</label>
+                </nz-radio-group>
+            </span>
+        </div>
+
+        <!-- application -->
+        <div class="mt-20">
+            <span>Application: </span>
+            <span>
+                <nz-radio-group class="ml-5" [(ngModel)]="filterData.selectedApplicationId">
+                    <label *ngFor="let aplItem of applicationList" nz-radio-button [nzValue]="aplItem.value">{{aplItem.label}}</label>
+                </nz-radio-group>
+            </span>
+        </div>
+
+        <!-- market -->
+        <div class="mt-20">
+            <span>Market: </span>
+            <span>
+                <nz-radio-group class="ml-5" [(ngModel)]="filterData.selectedMarketId">
+                    <label *ngFor="let marItem of marketList" nz-radio-button [nzValue]="marItem.value">{{marItem.label}}</label>
+                </nz-radio-group>
+            </span>
+        </div>
+
+        <!-- http status -->
+        <div class="mt-20">
+            <span>HTTP Status: </span>
+            <span>
+                <nz-radio-group class="ml-5" [(ngModel)]="filterData.selectedHttpStatus">
+                    <label *ngFor="let httpStatusItem of httpStatusList" nz-radio-button [nzValue]="httpStatusItem.value">{{httpStatusItem.label}}</label>
+                </nz-radio-group>
+            </span>
+        </div>
+
+        <!-- earliest time -->
+        <div class="mt-20">
+            <span>Earliest Time: </span>
+            <span>
+                <nz-select class="ml-5" [(ngModel)]="filterData.selectedPeriod" [nzDropdownMatchSelectWidth]="false">
+                    <nz-option *ngFor="let periodItem of periodList" [nzValue]="periodItem.value" [nzLabel]="periodItem.label"></nz-option>
+                </nz-select>
+            </span>
+        </div>
+
+        <!-- uri -->
+        <div class="mt-20">
+            <span>URI: </span>
+            <span>
+                <input nz-input [(ngModel)]="filterData.uri" />
+            </span>
+        </div>
+
+        <!-- username -->
+        <div class="mt-20" *ngIf="filterData.selectedApplicationId ==='GM' || filterData.selectedApplicationId === 'CBOL_APP'">
+            <span>Username: </span>
+            <span>
+                <input nz-input [placeholder]="currentChannelConfig.username['label']" [(ngModel)]="filterData.usernameSearch" maxlength="4" />
+            </span>
+        </div>
+
+        <!-- cif -->
+        <div class="mt-20" *ngIf="filterData.selectedApplicationId ==='ESB'">
+            <span>Cif: </span>
+            <span>
+                <input nz-input [placeholder]="currentChannelConfig.cif['label']" [(ngModel)]="filterData.cifSearch" />
+            </span>
+        </div>
+
+        <!-- DIY Search Language -->
+        <div class="mt-20">
+            <span>DIY Search Language: </span>
+            <span>
+                <textarea nz-input [placeholder]="currentChannelConfig.diySearchLanguage['label']"  [nzAutosize]="{ minRows: 3, maxRows: 5 }" [(ngModel)]="filterData.diySearchLanguage"></textarea>
+            </span>
+        </div>
+    </ng-container>
+</nz-modal>
+<!-- splunk search modal end -->
+
+<app-upload-image 
+    [imageUploadURI]="imageUploadURI" 
+    [uploadParams]="setFileUploadParams" 
+    pageTitle="Upload a New Screen to Replace Current One" 
+    (afterUploadedAction)="afterImageUpload()" 
+    [uploadNotes]="imageUploadNotes"
+    [selectedPageViewType]="selectedPageViewType"></app-upload-image>

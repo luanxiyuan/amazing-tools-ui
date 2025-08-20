@@ -1,0 +1,52 @@
+.container {
+    background-color: #f0f2f5;
+    height: 100%;
+    overflow: auto;
+}
+
+.introduction {
+    padding: 50px 50px 0 50px;
+}
+.app-list {
+    padding: 0 50px 0 50px;
+}
+
+.function-list {
+    margin-top: 1vh;
+    padding-bottom: 50px;
+}
+
+.function-card {
+    width: 96%;
+    min-height: 50px;
+}
+
+.function-card-add {
+    width: 96%;
+    min-height: 50px;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+.tool-app-card {
+    margin-top: 15px;
+    display: flex;
+    /* justify-content: center; Center horizontally */
+}
+
+.large-icon {
+    font-size: 33px;
+}
+
+.header1 {
+    font-size: 25px;
+    font-weight: 400;
+    font-family: sans-serif;
+}
+
+.header2 {
+    font-size: 35px;
+    font-weight: 600;
+    font-family: sans-serif;
+}

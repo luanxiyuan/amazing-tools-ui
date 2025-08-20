@@ -1,0 +1,46 @@
+.layout {
+    min-height: 100vh;
+}
+
+nz-header {
+    position: fixed;
+    width: 100%;
+}
+
+.query-card-info-header {
+    z-index: 999;
+}
+
+.query-card-info-body {
+    padding: 90px 50px 20px 50px;
+}
+
+.logo-text {
+    width: 200px;
+    height: 100%;
+    color: white;
+    font-size: 20px;
+    float: left;
+}
+
+.inner-content {
+    background: #fff;
+    padding: 10px;
+}
+
+.content-body {
+    margin-top: 15px !important;
+}
+
+.view-type-tab {
+    margin: 10px 10px 20px 0;
+    float: right;
+}
+
+.command-line .dislay-when-hover {
+    visibility: hidden;
+}
+
+.command-line:hover .dislay-when-hover {
+    visibility: visible;
+}

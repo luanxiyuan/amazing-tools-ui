@@ -1,0 +1,61 @@
+<nz-modal [(nzVisible)]="showUploadImgDialog" [nzTitle]="pageTitle" (nzOnCancel)="closeUploadImgDialog()" [nzWidth]="800">
+    <ng-container *nzModalContent>
+        <div *ngIf="showPageTitle" class="mb-15">
+            <span class="fw-600">Page Description</span>
+            <span>
+                <input nz-input placeholder="" [(ngModel)]="pageDescription"/>
+            </span>
+        </div>
+        <div *ngIf="selectedPageViewType" class="mb-15">
+            <span class="fw-600">Page View Type</span>
+            <span class="ml-10">
+                <nz-radio-group [(ngModel)]="selectedPageViewType">
+                    <label nz-radio-button *ngFor="let viewType of pageViewTypes" [nzValue]="viewType">{{viewType}}</label>
+                </nz-radio-group>
+            </span>
+        </div>
+        <div *ngIf="applicationScopeType === scopeTypeRegion" class="mb-15">
+            <span class="fw-600">Region</span>
+            <span class="ml-10">
+                <nz-radio-group [(ngModel)]="selectedRegion">
+                    <label nz-radio-button *ngFor="let region of applicationRegions" [nzValue]="region">{{region}}</label>
+                </nz-radio-group>
+            </span>
+        </div>
+        <div *ngIf="applicationScopeType === scopeTypeMarket" class="mb-15">
+            <span class="fw-600">Market</span>
+            <span class="ml-10">
+                <nz-radio-group [(ngModel)]="selectedMarket">
+                    <label nz-radio-button *ngFor="let market of applicationMarkets" [nzValue]="market">{{market}}</label>
+                </nz-radio-group>
+            </span>
+        </div>
+        <div class="fw-600">*Please note:</div>
+        <div *ngFor="let note of uploadNotes">{{note}}</div>
+        <nz-spin nzTip="Uploading..." [nzSpinning]="isSpinning">
+            <div class="uploadContainer" [ngClass]="{'uploadTypeError': fileInfoError}">
+                <nz-upload 
+                    nzType="drag"
+                    nzName="image"
+                    [nzAction]="imageUploadURI" 
+                    [nzBeforeUpload]="beforeUpload"
+                    (nzChange)="handleChange($event)"
+                    [nzData]="uploadParams"
+                    [nzFileList]="imageFileList" 
+                    [nzShowUploadList]="showUploadList">
+                    <p class="ant-upload-drag-icon">
+                        <span nz-icon nzType="upload"></span>
+                    </p>
+                    <p class="ant-upload-text">Click or drag file to this area to upload</p>
+                </nz-upload>
+                <div *ngIf="fileInfoError" style="color: red;">{{fileInfoErrorMsg}}</div>
+            </div>
+        </nz-spin>
+        <nz-alert *ngIf="uploadSuccessFlag" nzType="success" [nzMessage]="uploadDoneMsg" nzShowIcon></nz-alert>
+        <nz-alert *ngIf="uploadErrorFlag" nzType="error" [nzMessage]="uploadDoneMsg" nzShowIcon></nz-alert>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button nzType="primary" (click)="closeUploadImgDialog()">Close</button>
+    </div>
+</nz-modal>
+

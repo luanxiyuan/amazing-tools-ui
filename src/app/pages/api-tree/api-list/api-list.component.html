@@ -1,0 +1,548 @@
+<div class="search-form">
+    <form nz-form [formGroup]="searchForm" class="ant-advanced-search-form" (submit)="onSearchApis()">
+        <div nz-row [nzGutter]="24">
+            <!-- line 1 -->
+            <!-- URI Input -->
+            <div nz-col [nzSpan]="9">
+                <nz-form-item>
+                    <nz-form-label nzFor="uri">URI</nz-form-label>
+                    <nz-form-control>
+                        <nz-input-group [nzAddOnBefore]="addUriModeBeforeTemplate" [nzSuffix]="inputClearName">
+                            <ng-template #addUriModeBeforeTemplate>
+                                <nz-select formControlName="uriSearchMode" [nzDropdownMatchSelectWidth]="false" class="uri-mode-select">
+                                    <nz-option *ngFor="let mode of uriSearchModes" [nzLabel]="mode" [nzValue]="mode"></nz-option>
+                                </nz-select>
+                            </ng-template>
+                            <input formControlName="uri" placeholder="Input the URI such as /v1/customerNumbers/phone/{phoneNumber}" nz-input />
+                        </nz-input-group>
+                        <ng-template #inputClearName>
+                            <span *ngIf="searchForm.get('uri')?.value" nz-icon class="ant-input-clear-icon"
+                                nzTheme="fill" nzType="close-circle" (click)="clearInputUri()"></span>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <!-- Http Method Dropdown -->
+            <div nz-col [nzSpan]="5">
+                <nz-form-item>
+                    <nz-form-label nzFor="httpMethod">Http Method</nz-form-label>
+                    <nz-form-control>
+                        <nz-select nzAllowClear formControlName="httpMethod">
+                            <nz-option *ngFor="let method of httpMethods" [nzValue]="method" [nzLabel]="method"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <!-- Classification Dropdown -->
+            <div nz-col [nzSpan]="4">
+                <nz-form-item>
+                    <nz-form-label nzFor="classification">Classification</nz-form-label>
+                    <nz-form-control>
+                        <nz-select nzAllowClear formControlName="classification">
+                            <nz-option *ngFor="let classification of classifications" [nzValue]="classification" [nzLabel]="classification"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <!-- Swagger Title Input -->
+            <div nz-col [nzSpan]="6">
+                <nz-form-item>
+                    <nz-form-label nzFor="swaggerTitle">Swagger Title</nz-form-label>
+                    <nz-form-control>
+                        <nz-input-group [nzSuffix]="inputClearSwaggerTitle">
+                            <input nz-input formControlName="swaggerTitle"/>
+                        </nz-input-group>
+                        <ng-template #inputClearSwaggerTitle>
+                            <span *ngIf="searchForm.get('swaggerTitle')?.value" nz-icon class="ant-input-clear-icon"
+                                nzTheme="fill" nzType="close-circle" (click)="clearInputSwaggerTitle()"></span>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+
+            <!-- line 2 -->
+            <!-- Belongs To Application Dropdown -->
+            <div nz-col [nzSpan]="7">
+                <nz-form-item>
+                    <nz-form-label nzFor="belongsToApplication">Application</nz-form-label>
+                    <nz-form-control>
+                        <nz-select nzAllowClear formControlName="belongsToApplication" (ngModelChange)="onBelongsToApplicationFilter($event)">
+                            <nz-option *ngFor="let application of belongsToApplications" [nzValue]="application.name" [nzLabel]="application.name"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <!-- Channel Dropdown -->
+            <div nz-col [nzSpan]="6">
+                <nz-form-item>
+                    <nz-form-label nzFor="channel">Channel</nz-form-label>
+                    <nz-form-control>
+                        <nz-select nzAllowClear formControlName="channel" [nzDisabled]="filterChannelDisabled">
+                            <nz-option *ngFor="let channel of channels" [nzValue]="channel" [nzLabel]="channel"></nz-option>
+                        </nz-select>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <!-- API Name Input -->
+            <div nz-col [nzSpan]="7">
+                <nz-form-item>
+                    <nz-form-label nzFor="apiName">API Name</nz-form-label>
+                    <nz-form-control>
+                        <nz-input-group [nzSuffix]="inputClearApiName">
+                            <input nz-input formControlName="apiName"/>
+                        </nz-input-group>
+                        <ng-template #inputClearApiName>
+                            <span *ngIf="searchForm.get('apiName')?.value" nz-icon class="ant-input-clear-icon"
+                                nzTheme="fill" nzType="close-circle" (click)="clearInputApiName()"></span>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            
+            <div nz-col [nzSpan]="4">
+                <nz-space>
+                    <button type="submit" *nzSpaceItem nz-button nzType="primary">
+                        <span nz-icon nzType="search" nzTheme="outline"></span>
+                        Search
+                    </button>
+                    <button *nzSpaceItem nz-button nz-tooltip nzTooltipTitle="Reset" nzType="default" (click)="resetSearchForm()">
+                        <span nz-icon nzType="clear" nzTheme="outline"></span>
+                    </button>
+                    <button *nzSpaceItem nz-button nz-tooltip nzTooltipTitle="Export the result to Excel" nzType="default" (click)="exportOpenAndPrivateApiToExcel()">
+                        <span nz-icon nzType="export" nzTheme="outline"></span>
+                    </button>
+                </nz-space>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="floating-div">
+    <button nz-button nzSize="large" nz-tooltip nzTooltipPlacement="left" nzTooltipTitle="Add an API" nzType="primary" nzShape="circle" (click)="startOpenAndPrivateApiAddDrawer()">
+        <span nz-icon nzType="plus-circle" nzTheme="outline"></span>
+    </button>
+</div>
+
+<nz-table 
+    [nzData]="displayOpenAndPrivateApis" 
+    [nzFrontPagination]="false"
+    [nzPageSize]="openAndPrivateApiPageSize" 
+    [nzPageIndex]="currentPageIndex" 
+    [nzTotal]="filteredOpenAndPrivateApiCount" 
+    (nzPageIndexChange)="onPageIndexChange($event)" 
+    [nzScroll]="{ x: '2500px' }"
+    id="tableDiv">
+    <thead>
+        <tr>
+            <th nzLeft nzWidth="60px"></th>
+            <th nzLeft class="w-250">
+                URI
+                <nz-badge nzStandalone [nzOverflowCount]="badgeOverflowCount" [nzCount]="filteredOpenAndPrivateApiCount"></nz-badge>
+            </th>
+            <th nzLeft class="w-60">Http Method</th>
+            <th class="w-90">Classification</th>
+            <th class="w-80">Belogs to Application</th>
+            <th class="w-70">Channel</th>
+            <th class="w-180">Swagger Title</th>
+            <th class="w-180">Service Name</th>
+            <th class="w-150">API Name</th>
+            <!-- <th class="w-80">Region / Country</th> -->
+            <th class="w-90">BIAN Behavior Qualifier</th>
+            <th class="w-90">Sub Qualifier</th>
+            <th class="w-90">BIAN Adoption Level</th>
+            <th class="w-60">Status</th>
+            <th class="w-200">Remark</th>
+            <th nzRight class="w-100">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let data of displayOpenAndPrivateApis">
+            <tr>
+                <td nzLeft [nzExpand]="data.expendFlag" nz-tooltip [nzTooltipTitle]="(data.subIds ? data.subIds.length : 0) + ' Sub-API(s)'"
+                    [nzTooltipMouseEnterDelay]="0" [nzTooltipMouseLeaveDelay]="0" (nzExpandChange)="onExpandChange(data.id, $event)">
+                </td>
+                <td nzLeft>
+                    <span class="break-text">{{data.uri}}</span>
+                </td>
+                <td nzLeft>
+                    <nz-tag [nzColor]="data.httpMethod | httpMethodColor">{{data.httpMethod || 'NA'}}</nz-tag>
+                </td>
+                <td>
+                    <nz-tag [nzColor]="data.classification | apiClassificationColor">{{data.classification || 'NA'}}</nz-tag>
+                </td>
+                <td>
+                    <nz-tag [nzColor]="data.belongsToApplication | applicationColor">{{data.belongsToApplication || 'NA'}}</nz-tag>
+                </td>
+                <td>{{ data.channel }}</td>
+                <td>{{ data.swaggerTitle }}</td>
+                <td>{{ data.serviceName }}</td>
+                <td>{{ data.apiName }}</td>
+                <!-- <td>{{ data.regionOrCountry }}</td> -->
+                <td>{{ data.bianBehaviorQualifier }}</td>
+                <td>{{ data.subQualifier }}</td>
+                <td>{{ data.bianAdoptionLevel }}</td>
+                <td>{{ data.apiStatus }}</td>
+                <td>{{ data.remark }}</td>
+                <td nzRight>
+                    <nz-space>
+                        <button *nzSpaceItem nz-button nzType="primary" nz-tooltip nzTooltipTitle="Add Sub APIs" (click)="startAddSubApiDrawer(data)">
+                            <span nz-icon nzType="appstore-add"></span>
+                        </button>
+                        <button *nzSpaceItem nz-button nzType="default" nz-tooltip nzTooltipTitle="See which pages are using it" (click)="startViewApiPagesDrawer(data)">
+                            <span nz-icon nzType="file-ppt"></span>
+                        </button>
+                        <button *nzSpaceItem nz-button nz-dropdown [nzDropdownMenu]="menu">
+                            <span nz-icon nzType="ellipsis" nzTheme="outline"></span>
+                        </button>
+                        <nz-dropdown-menu #menu="nzDropdownMenu">
+                            <ul nz-menu>
+                                <li nz-menu-item nz-tooltip nzTooltipTitle="Edit this API" (click)="startOpenAndPrivateApiEditDrawer(data)">
+                                    <a>
+                                        <span nz-icon nzType="edit" nzTheme="outline"></span> Edit
+                                    </a>
+                                </li>
+                                <li nz-menu-item>
+                                    <a nzDanger nz-popconfirm nzPopconfirmTitle="It will be removed from Sub API list as well, continue to delete?" 
+                                        (nzOnConfirm)="deleteOpenAndPrivateApiById(data.id)" nzPopconfirmPlacement>
+                                        <span nz-icon nzType="delete" nzTheme="outline"></span> Delete
+                                    </a>
+                                </li>
+                            </ul>
+                        </nz-dropdown-menu>
+                    </nz-space>
+                </td>
+            </tr>
+
+            <!-- private APIs -->
+            <tr *ngIf="data.expendFlag && (!data.subApis || data.subApis.length <= 0)">
+                <td nzLeft></td>
+                <td nzLeft>
+                    <span class="pl-20">There's no sub APIs</span>
+                </td>
+                <td nzLeft></td>
+                <td colspan="11">
+                </td>
+                <td nzRight></td>
+            </tr>
+            <ng-container *ngIf="data.expendFlag && data.subApis && data.subApis.length > 0">
+                <tr *ngFor="let subApi of data.subApis">
+                    <td nzLeft></td>
+                    <td nzLeft>
+                        <span class="break-text pl-20">- {{subApi.uri}}</span>
+                    </td>
+                    <td nzLeft>
+                        <nz-tag [nzColor]="subApi.httpMethod | httpMethodColor">{{subApi.httpMethod || 'NA'}}</nz-tag>
+                    </td>
+                    <td>
+                        <nz-tag [nzColor]="subApi.classification | apiClassificationColor">{{subApi.classification || 'NA'}}</nz-tag>
+                    </td>
+                    <td>
+                        <nz-tag [nzColor]="subApi.belongsToApplication | applicationColor">{{subApi.belongsToApplication || 'NA'}}</nz-tag>
+                    </td>
+                    <td>{{ subApi.channel }}</td>
+                    <td>{{ subApi.swaggerTitle }}</td>
+                    <td>{{ subApi.serviceName }}</td>
+                    <td>{{ subApi.apiName }}</td>
+                    <!-- <td>{{ data.regionOrCountry }}</td> -->
+                    <td>{{ subApi.bianBehaviorQualifier }}</td>
+                    <td>{{ subApi.subQualifier }}</td>
+                    <td>{{ subApi.bianAdoptionLevel }}</td>
+                    <td>{{ subApi.apiStatus }}</td>
+                    <td>{{ subApi.remark }}</td>
+                    <td nzRight>
+                        <button nz-button nzDanger nz-popconfirm
+                            nzPopconfirmTitle="Are you sure to delete this Sub API?" (nzOnConfirm)="deleteSubApiById(data.id, subApi.id)"
+                            nzPopconfirmPlacement>
+                            <span nz-icon nzType="delete" nzTheme="outline"></span>
+                        </button>
+                    </td>
+                </tr>
+            </ng-container>
+        </ng-container>
+    </tbody>
+</nz-table>
+
+<!-- api edit drawer start -->
+<nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" [nzMaskClosable]="true" [nzWidth]="editDrawerWidth"
+    [nzVisible]="apiAddOrEditDrawerVisible" [nzTitle]="addOrEditMode === 'Edit' ? 'Edit API Details' : 'Add an API'" [nzFooter]="footerTpl"
+    (nzOnClose)="closeApiAddOrEditDrawer()">
+
+    <form nz-form *nzDrawerContent nzLayout="vertical" [formGroup]="validateApiForm">
+        <div class="api-details-div">
+            <!-- URI -->
+            <nz-form-item>
+                <nz-form-label><span class="fc-red">*</span>URI</nz-form-label>
+                <nz-form-control nzErrorTip="URI is required">
+                    <input nz-input formControlName="uri" placeholder="Input URI" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <!-- Http Method -->
+            <nz-form-item>
+                <nz-form-label><span class="fc-red">*</span>Http Method</nz-form-label>
+                <nz-form-control>
+                    <nz-radio-group formControlName="httpMethod">
+                        <label nz-radio-button *ngFor="let httpMethod of httpMethods" [nzValue]="httpMethod">{{httpMethod}}</label>
+                    </nz-radio-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <!-- Classification -->
+            <nz-form-item>
+                <nz-form-label><span class="fc-red">*</span>Classification</nz-form-label>
+                <nz-form-control>
+                    <nz-radio-group formControlName="classification">
+                        <label nz-radio-button *ngFor="let classification of classifications" [nzValue]="classification">{{classification}}</label>
+                    </nz-radio-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <!-- Belongs to Application -->
+            <nz-form-item>
+                <nz-form-label>Belongs to Application</nz-form-label>
+                <nz-form-control>
+                    <nz-radio-group formControlName="belongsToApplication" (ngModelChange)="onBelongsToApplicationsChange($event)">
+                        <label nz-radio-button *ngFor="let app of belongsToApplications" [nzValue]="app.name">{{app.name}}</label>
+                    </nz-radio-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <!-- Channel -->
+            <nz-form-item>
+                <nz-form-label>Channel</nz-form-label>
+                <nz-form-control>
+                    <nz-select formControlName="channel" nzPlaceHolder="Select Channel" [nzDisabled]="drawerChannelDisabled">
+                        <nz-option *ngFor="let channel of channels" [nzValue]="channel" [nzLabel]="channel"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <!-- Region / Country -->
+            <!-- <nz-form-item>
+                <nz-form-label>Region / Country</nz-form-label>
+                <nz-form-control>
+                    <nz-select formControlName="regionOrCountry" nzPlaceHolder="Select Region / Country" [nzDisabled]="drawerRegionOrCountryDisabled">
+                        <nz-option *ngFor="let region of regionsOrCountries" [nzValue]="region" [nzLabel]="region"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item> -->
+
+            <!-- Swagger Title -->
+            <nz-form-item>
+                <nz-form-label>Swagger Title</nz-form-label>
+                <nz-form-control>
+                    <input nz-input formControlName="swaggerTitle" placeholder="Input Swagger Title" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <!-- Service Name -->
+            <nz-form-item>
+                <nz-form-label>Service Name</nz-form-label>
+                <nz-form-control>
+                    <input nz-input formControlName="serviceName" placeholder="Input Service Name" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <!-- API Name -->
+            <nz-form-item>
+                <nz-form-label>API Name</nz-form-label>
+                <nz-form-control>
+                    <input nz-input formControlName="apiName" placeholder="Input API Name" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <!-- BIAN Behavior Qualifier -->
+            <nz-form-item>
+                <nz-form-label>BIAN Behavior Qualifier</nz-form-label>
+                <nz-form-control>
+                    <input nz-input formControlName="bianBehaviorQualifier" placeholder="Input BIAN Behavior Qualifier" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <!-- Sub Qualifier -->
+            <nz-form-item>
+                <nz-form-label>Sub Qualifier</nz-form-label>
+                <nz-form-control>
+                    <input nz-input formControlName="subQualifier" placeholder="Input Sub Qualifier" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <!-- BIAN Adoption Level -->
+            <nz-form-item>
+                <nz-form-label>BIAN Adoption Level</nz-form-label>
+                <nz-form-control>
+                    <input nz-input formControlName="bianAdoptionLevel" placeholder="Input BIAN Adoption Level" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <!-- Status -->
+            <nz-form-item>
+                <nz-form-label>Status</nz-form-label>
+                <nz-form-control>
+                    <nz-radio-group formControlName="apiStatus">
+                        <label nz-radio-button *ngFor="let status of apiStatuses" [nzValue]="status">{{status}}</label>
+                    </nz-radio-group>
+                </nz-form-control>
+            </nz-form-item>
+
+            <!-- Remark -->
+            <nz-form-item>
+                <nz-form-label>Remark</nz-form-label>
+                <nz-form-control>
+                    <textarea nz-input formControlName="remark" placeholder="Input remark for API" nzAutosize></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </form>
+
+    <ng-template #footerTpl>
+        <div style="float: right">
+            <button nz-button style="margin-right: 8px;" (click)="closeApiAddOrEditDrawer()">Cancel</button>
+            <button nz-button nzType="primary" [disabled]="!validateApiForm.valid"
+                (click)="submitApiForm()">Submit</button>
+        </div>
+    </ng-template>
+</nz-drawer>
+<!-- api edit drawer end -->
+
+<!-- add sub api drawer start -->
+<nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" [nzMaskClosable]="true" [nzWidth]="subApiAddDrawerWidth"
+    [nzVisible]="addSubApiDrawerVisible" [nzTitle]="'Add Sub API(s) for ' + selectedOpenAndPrivateApi.uri + '-[' + selectedOpenAndPrivateApi.httpMethod + ']'" [nzFooter]="addSubApiFooterTemp"
+    (nzOnClose)="closeAddSubApiDrawer()">
+
+    <div *nzDrawerContent>
+        <!-- current sub api list start -->
+        <div nz-row [nzGutter]="8" class="mb-30">
+            <div nz-col nzSpan="24">
+                <nz-divider nzOrientation="left" nzText="Current Sub API(s)"></nz-divider>
+            </div>
+            <div nz-col nzSpan="24">
+                <ul nz-list nzSize="large">
+                      <li nz-list-item nzNoFlex *ngFor="let subApi of currentSubApis">
+                        <ul nz-list-item-actions>
+                          <nz-list-item-action>
+                                <span nz-icon nzDanger nzType="delete" nz-popconfirm nzPopconfirmTitle="Are you sure to remove this Sub API?" 
+                                    (nzOnConfirm)="removeSubApiRecord(subApi.id)"></span>
+                          </nz-list-item-action>
+                        </ul>
+                        <nz-tag [nzColor]="subApi.belongsToApplication | applicationColor">{{subApi.belongsToApplication || 'NA'}}</nz-tag>
+                        <nz-tag [nzColor]="subApi.classification | apiClassificationColor">{{subApi.classification || 'NA'}}</nz-tag>
+                        <nz-tag [nzColor]="subApi.httpMethod | httpMethodColor">{{subApi.httpMethod || 'NA'}}</nz-tag>
+                        <a class="pl-4 pr-4" nz-button nzType="link" (click)="openApiLink(subApi.uri, subApi.httpMethod)">{{subApi.uri}}</a>
+                      </li>
+                      <nz-list-empty *ngIf="currentSubApis.length <= 0" />
+                </ul>
+            </div>
+        </div>
+        <!-- current sub api list end -->
+        
+        <!-- add on sub api list start -->
+        <div nz-row [nzGutter]="8" class="add-sub-api-section">
+            <div nz-col nzSpan="24">
+                <nz-divider nzOrientation="left" nzText="Select a Sub API to Add"></nz-divider>
+            </div>
+            <div nz-col nzSpan="23">
+                <nz-select class="add-sub-api-dropdown" nzShowSearch [nzServerSearch]="true" nzAllowClear nzPlaceHolder="Input Sub API URI to search" (nzOnSearch)="onSearchSubApiInputChange($event)" [(ngModel)]="selectedSubApiId">
+                    <ng-container *ngFor="let groupApis of groupedDropdownOpenAndPrivateApis | keyvalue">
+                        <nz-option-group [nzLabel]="groupApis.key">
+                            <nz-option *ngFor="let api of groupApis.value" nzCustomContent [nzLabel]="api.uri" [nzValue]="api.id">
+                                <nz-tag [nzColor]="api.belongsToApplication | applicationColor">{{api.belongsToApplication || 'NA'}}</nz-tag>
+                                <nz-tag [nzColor]="api.classification | apiClassificationColor">{{api.classification || 'NA'}}</nz-tag>
+                                <nz-tag [nzColor]="api.httpMethod | httpMethodColor">{{api.httpMethod || 'NA'}}</nz-tag>
+                                {{api.uri}}
+                            </nz-option>
+                        </nz-option-group>
+                    </ng-container>
+                </nz-select>
+            </div>
+            <div nz-col nzSpan="1">
+                <button nz-button nzType="primary" [disabled]="!selectedSubApiId" (click)="addSubApiRecord()">
+                    <span nz-icon nzType="plus"></span>
+                </button>
+            </div>
+        </div>
+        <!-- add on sub api list end -->
+
+        <div nz-row [nzGutter]="8">
+            <div nz-col nzSpan="24" class="align-right mt-10">
+                <span>Add to "Current Sub API(s) and click "Submit" to save all.</span>
+            </div>
+            <div nz-col nzSpan="24" class="align-right">
+                <span class="v-aligh-center">Not able to find the Sub API in above Dropdown?</span>
+                <span>
+                    <a class="pl-4 pr-4" nz-button nzType="link" (click)="startOpenAndPrivateApiAddDrawer2()">Add One</a>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #addSubApiFooterTemp>
+        <div style="float: right">
+            <button nz-button style="margin-right: 8px;" (click)="closeSubApiAddDrawer()">Cancel</button>
+            <button nz-button nzType="primary" (click)="submitSubApiAddForm()">Submit</button>
+        </div>
+    </ng-template>
+</nz-drawer>
+<!-- add sub api drawer end -->
+
+<!-- view api pages drawer start -->
+<nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" [nzMaskClosable]="true" [nzWidth]="uiApiRelationDrawerWidth"
+    [nzVisible]="uiApiRelationDrawerVisible" [nzTitle]="'Pages which are using API ' + selectedOpenAndPrivateApi.uri + ' (' + selectedOpenAndPrivateApi.httpMethod + ')'" [nzFooter]="uiApiRelationFooterTemp"
+    (nzOnClose)="closeUiApiRelationDrawer()">
+
+    <div *nzDrawerContent>
+        <div nz-row [nzGutter]="8" class="mb-30">
+            <div nz-col nzSpan="24" *ngIf="uiApiRelations.length > 0">
+                <nz-image-group>
+                    <div nz-row *ngFor="let relationData of uiApiRelations" class="page-list-div">
+                        <div nz-col nzSpan="9" class="image-card">
+                            <div>
+                                <a><img nz-image class="page-img-list-vew" alt="image" nzSrc="{{imageBaseUrl}}{{relationData.pageUri}}" [nzFallback]="fallback"/></a>
+                            </div>
+                        </div>
+                        <div nz-col nzSpan="15" class="image-card">
+                            <div class="page-image-header mb-10">
+                                {{relationData.pageDesc}}
+                            </div>
+                            <div class="mb-10">
+                                <div class="mb-10">
+                                    <nz-tag [nzColor]="relationData.appName | uiAppTypeColor">{{relationData.appName || 'NA'}}</nz-tag>
+                                    <nz-tag [nzColor]="relationData.pageViewType | pageViewTypeColor">{{ relationData.pageViewType || 'NA' }}</nz-tag>
+                                </div>
+                                <div class="mb-5">
+                                    <span class="field-title">Module Name: </span>
+                                    <span>{{relationData.moduleName}}</span>
+                                </div>
+                                <div class="mb-5">
+                                    <span class="field-title">Function Name: </span>
+                                    <span>{{relationData.funName}}</span>
+                                </div>
+                                <div class="mb-10">
+                                    <span class="field-title">Usage scenario: </span>
+                                    <span>{{relationData.scenario}}</span>
+                                </div>
+                                <button nz-button nzType="primary" (click)="goToViewApiUiMarkerFormDetails(relationData)">
+                                    <span nz-icon nzType="file-ppt" nzTheme="outline"></span>
+                                    View the UI
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </nz-image-group>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #uiApiRelationFooterTemp>
+        <div style="float: right">
+            <button nz-button style="margin-right: 8px;" (click)="closeUiApiRelationDrawer()">Cancel</button>
+        </div>
+    </ng-template>
+</nz-drawer>
+<!-- view api pages drawer end -->

@@ -1,0 +1,24 @@
+<nz-layout>
+    <nz-sider nzCollapsible [nzCollapsed]="false" nzWidth="250px">
+        <div class="logo">EAT</div>
+        <ul nz-menu nzTheme="dark" nzMode="inline" class="sider-menu-ul">
+            <ng-container *ngFor="let category of appCategories">
+                <li *ngIf="category.apps" nz-submenu [nzTitle]="category.name || ''" [nzIcon]="category.nzIcon || ''">
+                    <ul>
+                        <ng-container *ngFor="let app of category.apps">
+                            <li nz-menu-item (click)="linkout(app.uri || '')">{{ app.name }}</li>
+                        </ng-container>
+                    </ul>
+                </li>
+
+                <li *ngIf="!category.apps" (click)="linkout(category.uri || '')" nz-menu-item>
+                    <span nz-icon [nzType]="category.nzIcon || ''"></span>
+                    <span>{{ category.name }}</span>
+                </li>
+            </ng-container>
+        </ul>
+    </nz-sider>
+    <nz-layout>
+        <router-outlet></router-outlet>
+    </nz-layout>
+</nz-layout>

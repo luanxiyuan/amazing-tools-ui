@@ -1,0 +1,52 @@
+<nz-layout class="container-out">
+    <nz-header>
+        <div class="max-height-1000">
+            <div class="logo">
+                <span>BASE64 Converter</span>
+            </div>
+        </div>
+    </nz-header>
+
+    <nz-content>
+        <div class="inner-content">
+            <nz-tabset nzType="card">
+                <nz-tab [nzTitle]="'File to BASE64'" (nzClick)="switchTab('fileToBase64')">
+                    <!-- file upload part -->
+                    <p style="font-weight: 600;">*Please note:</p>
+                    <p *ngFor="let note of fileUploadNotes">{{note}}</p>
+                    <input type="file"
+                        (change)="onFileSelected($event)"
+                        [accept]="allowedFileTypes"/>
+                    <div *ngIf="fileInfoErrorMsg" class="error-message">{{ fileInfoErrorMsg }}</div>
+
+                    <!-- base64 result part -->
+                    <div class="resultDiv mt-30" *ngIf="base64String">
+                        <span class="fw-600 mt-30">BASE64 Data:</span>
+                        <span style="float: right">
+                            <button nz-button nzSize="small" nzType="default" (click)="copyToClipboard(base64String)">Copy</button>
+                        </span>
+                        <pre id="exec-log-pre" class="pre-label-font pre-label-breakline light-gray-border mt-10 p-10">{{ base64String }}</pre>
+                    </div>
+                </nz-tab>
+
+                <nz-tab [nzTitle]="'BASE64 to File'" (nzClick)="switchTab('base64ToFile')">
+                    <!-- file upload part -->
+                    <p style="font-weight: 600;">Paste your BASE64 string below:</p>
+
+                    <nz-input-group [nzSuffix]="textAreaClearTpl" class="ant-input-affix-wrapper-textarea-with-clear-btn">
+                        <textarea nz-input rows="10" [(ngModel)]="base64SourceText" placeholder="BASE64 string..."></textarea>
+                    </nz-input-group>
+
+                    <ng-template #textAreaClearTpl>
+                        <span *ngIf="base64SourceText" nz-icon nzType="close-circle" nzTheme="fill" (click)="base64SourceText = ''" class="ant-input-clear-icon"></span>
+                    </ng-template>
+
+                    <p class="mt-20">
+                        <button [disabled]="base64SourceText == ''" nz-button nzType="primary" (click)="convertBase64ToFile()">Convert to File</button>
+                    </p>
+                    
+                </nz-tab>
+            </nz-tabset>
+        </div>
+    </nz-content>
+</nz-layout>

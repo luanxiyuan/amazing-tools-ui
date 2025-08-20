@@ -1,0 +1,25 @@
+<ng-container>
+    <p style="font-weight: 600;">*Please note:</p>
+    <p *ngFor="let note of uploadNotes">{{note}}</p>
+    <nz-spin nzTip="Uploading..." [nzSpinning]="isSpinning">
+        <div class="uploadContainer" [ngClass]="{'uploadTypeError': fileInfoError}">
+            <nz-upload 
+                nzType="drag"
+                nzName="file"
+                [nzAction]="fileUploadURI" 
+                [nzBeforeUpload]="beforeUpload"
+                (nzChange)="handleChange($event)"
+                [nzData]="uploadParams"
+                [nzFileList]="fileFileList" 
+                [nzShowUploadList]="showUploadList">
+                <p class="ant-upload-drag-icon">
+                    <span nz-icon nzType="upload"></span>
+                </p>
+                <p class="ant-upload-text">Click or drag file to this area to upload</p>
+            </nz-upload>
+            <div *ngIf="fileInfoError" style="color: red;">{{fileInfoErrorMsg}}</div>
+        </div>
+    </nz-spin>
+    <nz-alert *ngIf="uploadSuccessFlag" nzType="success" [nzMessage]="uploadDoneMsg" nzShowIcon></nz-alert>
+    <nz-alert *ngIf="uploadErrorFlag" nzType="error" [nzMessage]="uploadDoneMsg" nzShowIcon></nz-alert>
+</ng-container>

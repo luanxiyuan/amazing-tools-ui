@@ -1,0 +1,75 @@
+<nz-layout class="layout">
+    <nz-header class="swagger-viewer-header">
+        <div class="logo-text">Swagger Viewer</div>
+        <button nz-button nzType="primary" (click)="openVscodePluginModal()">
+            <i nz-icon nzType="download"></i>VSCode Plugin
+        </button>
+    </nz-header>
+
+    <div class="swagger-viewer-body">
+        <nz-content>
+            <div class="inner-content">
+                <div nz-row>
+                    <div nz-col nzSpan="7" class="swagger-srouce">
+                        <nz-tabset nzType="card">
+                            <nz-tab [nzTitle]="'Swagger Json'">
+                                <form nz-form nzLayout="vertical" [formGroup]="swaggerJsonForm" (ngSubmit)="viewSwaggerWithJson()">
+                                    <nz-form-item>
+                                        <h4>Paste your Swagger Json</h4>
+                                        <nz-form-control>
+                                            <textarea class="textarea-swagger" nz-input formControlName="swaggerJson" placeholder="" [nzAutosize]="{ minRows: 10 }"></textarea>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <button nz-button nzBlock class="login-form-button login-form-margin" [nzType]="'primary'" [disabled]="!swaggerJsonForm.valid">View It</button>
+                                </form>
+                            </nz-tab>
+                            <nz-tab [nzTitle]="'Swagger Yaml'">
+                                <form nz-form nzLayout="vertical" [formGroup]="swaggerYamlForm" (ngSubmit)="viewSwaggerWithYaml()">
+                                    <nz-form-item>
+                                        <h4>Paste your Swagger Yaml</h4>
+                                        <nz-form-control>
+                                            <textarea class="textarea-swagger" nz-input formControlName="swaggerYaml" placeholder="" [nzAutosize]="{ minRows: 10 }"></textarea>
+                                        </nz-form-control>
+                                    </nz-form-item>
+                                    <button nz-button nzBlock class="login-form-button login-form-margin" [nzType]="'primary'" [disabled]="!swaggerYamlForm.valid">View It</button>
+                                </form>
+                            </nz-tab>
+                        </nz-tabset>
+                    </div>
+                    <div nz-col nzSpan="17">
+                        <div id="swagger-ui">
+                            <nz-result class="mt-70" nzIcon="robot" [nzTitle]="'No Swagger Data'"></nz-result>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nz-content>
+    </div>
+
+</nz-layout>
+
+<nz-modal [(nzVisible)]="isVsCodePluginPopupVisible" nzTitle="Download VSCode Plugin" (nzOnCancel)="closeVsCodePluginPopup()" (nzOnOk)="closeVsCodePluginPopup()"
+[nzWidth]="1000" nzMaskClosable="true"
+[nzCancelText]="null" [nzClosable]="true"
+[nzBodyStyle]="{ height: '75vh', overflow: 'auto' }">
+    <ng-container *nzModalContent>
+      <nz-steps [nzCurrent]="2" nzProgressDot nzDirection="vertical">
+        <nz-step nzTitle="1. Download the plugin file" [nzDescription]="downloadPlugin"></nz-step>
+        <nz-step nzTitle="2. Install the plugin" [nzDescription]="installImg"></nz-step>
+        <nz-step nzTitle="3. Use the plugin" [nzDescription]="usageImg"></nz-step>
+      </nz-steps>
+
+      <ng-template #downloadPlugin>
+        <button nz-button nzType="primary" (click)="downloadVsCodePlugin()">
+            <span nz-icon nzType="download"></span>
+            Download
+        </button>
+      </ng-template>
+      <ng-template #installImg>
+        <img class="plugin-img" src="assets/images/swagger-viewer/install.png" alt="VSCode Plugin Installation" />
+      </ng-template>
+      <ng-template #usageImg>
+        <img class="plugin-img" src="assets/images/swagger-viewer/usage.png" alt="VSCode Plugin Usage" />
+      </ng-template>
+    </ng-container>
+  </nz-modal>

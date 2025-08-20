@@ -1,0 +1,219 @@
+<div class="search-form">
+    <form nz-form [formGroup]="searchForm" class="ant-advanced-search-form">
+        <div nz-row [nzGutter]="24">
+            <!-- SOEID Input -->
+            <div nz-col [nzSpan]="9">
+                <nz-form-item>
+                    <nz-form-label nzFor="soeid">SOEID(s)</nz-form-label>
+                    <nz-form-control>
+                        <nz-input-group [nzSuffix]="inputClearSoeid">
+                            <input nz-input formControlName="soeid" placeholder="Input 1 or multiple SOEIDs divided by ,"/>
+                        </nz-input-group>
+                        <ng-template #inputClearSoeid>
+                            <span *ngIf="searchForm.get('soeid')?.value" nz-icon class="ant-input-clear-icon"
+                                nzTheme="fill" nzType="close-circle" (click)="clearInputSoeid()"></span>
+                        </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <!-- branch dropdown -->
+            <div nz-col [nzSpan]="4">
+                <nz-form-item>
+                    <nz-form-label nzFor="onlyDefaultBranch">Only Default Branch</nz-form-label>
+                    <nz-form-control>
+                        <nz-switch
+                            formControlName="onlyDefaultBranch"
+                            [nzCheckedChildren]="checkedTemplate"
+                            [nzUnCheckedChildren]="unCheckedTemplate"
+                            ></nz-switch>
+                            <ng-template #checkedTemplate>
+                                <span nz-icon nzType="check" nzTheme="outline"></span>
+                            </ng-template>
+                            <ng-template #unCheckedTemplate>
+                                <span nz-icon nzType="close" nzTheme="outline"></span>
+                            </ng-template>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+
+            <!-- Date Period Input -->
+            <div nz-col [nzSpan]="7">
+                <nz-form-item>
+                    <nz-form-label nzFor="datePeriod" nzTooltipTitle="Default Last 90 days">Date Period</nz-form-label>
+                    <nz-form-control>
+                        <nz-input-group>
+                            <nz-range-picker formControlName="datePeriod" [nzRanges]="datePeriodRanges" [nzFormat]="'yyyy/MM/dd'"></nz-range-picker>
+                        </nz-input-group>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+            
+            <div nz-col [nzSpan]="4">
+                <nz-space>
+                    <button *nzSpaceItem nz-button nzType="primary" (click)="onSearchCommits()">
+                        <span nz-icon nzType="search" nzTheme="outline"></span>
+                        Search
+                    </button>
+                    <button *nzSpaceItem nz-button nz-tooltip nzTooltipTitle="Reset" nzType="default" (click)="resetSearchForm()">
+                        <span nz-icon nzType="clear" nzTheme="outline"></span>
+                    </button>
+                    <button *nzSpaceItem nz-button nz-tooltip nzTooltipTitle="Export the result to Excel" nzType="default" (click)="exportCommitsToExcel()">
+                        <span nz-icon nzType="export" nzTheme="outline"></span>
+                    </button>
+                </nz-space>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="floating-div">
+    <button nz-button *ngIf="isAllowedToRefresh" nzSize="large" nz-tooltip nzTooltipPlacement="left" nzTooltipTitle="Refresh the commit records" nzType="primary" nzShape="circle" (click)="refreshCommitRecords()">
+        <span nz-icon nzType="reload" nzTheme="outline"></span>
+    </button>
+    <button nz-button class="ml-10" nzSize="large" nzType="default" nzShape="circle" (click)="openInstructionPopup()">
+        <span nz-icon nzType="question-circle" nzTheme="outline"></span>
+    </button>
+</div>
+
+<nz-modal [(nzVisible)]="isInstructionPopupVisible" nzTitle="Instructions about this tool"
+    (nzOnCancel)="closeInstructionPopup()" (nzOnOk)="closeInstructionPopup()" [nzWidth]="1000" nzMaskClosable="true"
+    [nzCancelText]="null" [nzClosable]="true" [nzBodyStyle]="{ height: '75vh', overflow: 'auto' }">
+    <ng-container *nzModalContent>
+        <div>
+            <span class="fs-18">Last Refresh Time: </span>
+            <span class="fs-18 fw-600">{{lastRefreshTime}} SST</span>
+        </div>
+        <div class="mt-20">
+            <span class="fs-18">Code repository commit record scanning mechanism: </span>
+        </div>
+        <div>
+            1. The commit records of the last {{durationByDays}} days will be scanned, and the refresh interval is {{allowedRefreshIntervalInMinute}} minutes.
+        </div>
+        <div>
+            2. In addition to the default branch, the other {{branchPageSize}} branches with recent commit records will be considered to reflect the commit records that have not been merged into the default branch.
+        </div>
+        <div>
+            3. The same commit ID of different branches will only be considered once, and the default branch will be given priority
+        </div>
+        <div class="mt-20">
+            <span class="fs-18">List of scanned code repositories:</span>
+            <nz-table [nzData]="lastRefreshRepos"
+                nzShowPagination="false">
+                <thead>
+                    <tr>
+                        <th>Project Space</th>
+                        <th>
+                            Repository Name
+                            <span class="fs-12 ml-20">(Your repo is not here? <a class="fs-12 p-0" nz-button nzType="link" (click)="contactAdminToAddRepo()">Contect me</a>)</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let data of lastRefreshRepos">
+                        <td>{{ data.projectSpace }}</td>
+                        <td>
+                            <a href="javascript:void(0)" (click)="linkoutRepo(data.repoLink || '')">{{ data.repoName }}</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </nz-table>
+        </div>
+    </ng-container>
+</nz-modal>
+
+<div class="table-operations">
+    <button nz-button (click)="resetFilters()">Clear filters</button>
+</div>
+<nz-table 
+    [nzData]="commitRecords"
+    nzShowPagination="false"
+    [nzScroll]="{ x: '1800px' }"
+    id="tableDiv">
+    <thead>
+        <tr>
+            <th nzLeft class="w-120" *ngIf="commitRecords.length > 0" [nzShowFilter]="true" [nzFilters]="authorFilterValues" [nzFilterMultiple]="true" (nzFilterChange)="goFilterByAuthors($event)">
+                Author
+                <nz-badge nzStandalone [nzOverflowCount]="badgeOverflowCount" [nzCount]="commitRecords.length"></nz-badge>
+            </th>
+            <th nzLeft class="w-120" *ngIf="commitRecords.length <= 0">
+                Author
+                <nz-badge nzStandalone [nzOverflowCount]="badgeOverflowCount" [nzCount]="commitRecords.length"></nz-badge>
+            </th>
+            <th class="w-70">Commit</th>
+            <th class="w-300">Message</th>
+            <th class="w-150" *ngIf="commitRecords.length > 0" [nzShowFilter]="true" [nzFilters]="repoFilterValues" [nzFilterMultiple]="true" (nzFilterChange)="goFilterByRepos($event)">Repository Name</th>
+            <th class="w-150" *ngIf="commitRecords.length <= 0">Repository Name</th>
+            <th class="w-100">Commit Date & Time</th>
+            <th class="w-90" *ngIf="commitRecords.length > 0" [nzShowFilter]="true" [nzFilters]="branchFilterValues" [nzFilterMultiple]="true" (nzFilterChange)="goFilterByBranches($event)">Branch</th>
+            <th class="w-90" *ngIf="commitRecords.length <= 0">Branch</th>
+            <th class="w-60">PR NO.</th>
+            <th nzRight class="w-80">Jira Link(s)</th>
+        </tr>
+    </thead>
+    <tbody>
+        <ng-container *ngFor="let data of commitRecords">
+            <tr>
+                <td nzLeft nzEllipsis>
+                    <a href="javascript:void(0)" (click)="linkoutAuthor(data.author_link || '')">
+                        <span class="break-text">{{data.author}}</span>
+                    </a>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" (click)="linkoutCommit(data.commit_link || '')">
+                        <span class="break-text">{{data.display_id}}</span>
+                    </a>
+                </td>
+                <td>
+                    <span class="break-text">{{data.message}}</span>
+                </td>
+                <td>
+                    <span class="break-text">{{data.repo_name}}</span>
+                </td>
+                <td>
+                    <span class="break-text">{{data.commit_time}}</span>
+                </td>
+                <td>
+                    <span class="break-text">{{data.branch}}</span>
+                </td>
+                <td>
+                    <div *ngFor="let pr of data?.pr_details" class="break-text">
+                        <a href="javascript:void(0)" (click)="linkoutPr(pr.pr_link || '')" nz-popover [nzPopoverTitle]="pr.id + ' - ' + pr.title" [nzPopoverContent]="tipsTemplate">
+                            {{pr.id}} 
+                        </a>
+                        <ng-template #tipsTemplate>
+                            <div>
+                                <p>
+                                    <span>From Branch: </span><strong>{{pr.from_branch}}</strong>
+                                    <span class="pl-10">To Branch: </span><strong>{{pr.to_branch}}</strong>
+                                </p>
+                                <p>
+                                    <span>Author: </span><strong>{{pr.author}}</strong>
+                                    <span class="pl-10">Reviewer: </span><strong>{{pr.reviewer}}</strong>
+                                </p>
+                                <p *ngIf="pr.state">
+                                    <nz-tag [nzColor]="pr.state | prStateColor">{{pr.state || ''}}</nz-tag>
+                                </p>
+                            </div>
+                        </ng-template>
+                    </div>
+                    <ng-template #tipsTemplate>
+                        <div>
+                            <p>
+                                From Branch: <strong>Add a Marker:</strong> Click and drag on the image below to mark.
+                            </p>
+                            <p><strong>Resize a Marker:</strong> Drag the border of the marker.</p>
+                        </div>
+                    </ng-template>
+                </td>
+                <td nzRight>
+                    <div *ngFor="let jira_id of data.jira_ids" class="break-text">
+                        <a href="javascript:void(0)" (click)="linkoutJira(jira_id || '')">
+                            {{jira_id}} 
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        </ng-container>
+    </tbody>
+</nz-table>

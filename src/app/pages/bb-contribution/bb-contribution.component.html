@@ -1,0 +1,22 @@
+<nz-layout class="container-out">
+
+    <nz-header class="ui-maker-header">
+        <div class="logo-text">Delivery Statistics Tool</div>
+    </nz-header>
+    <!-- <nz-affix>
+        <nz-header class="pl-70">
+            <div class="logo-text">Delivery Statistics Tool</div>
+        </nz-header>
+    </nz-affix> -->
+
+    <nz-content>
+        <div class="inner-content">
+            <router-outlet></router-outlet>
+        </div>
+    </nz-content>
+
+    <nz-footer></nz-footer>
+
+    <app-loading-spinner [size]="'large'"></app-loading-spinner>
+    
+</nz-layout>

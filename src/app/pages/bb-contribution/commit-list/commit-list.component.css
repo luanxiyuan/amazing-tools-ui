@@ -1,0 +1,68 @@
+.search-form {
+    border-bottom: 1px solid darkgrey;
+}
+
+.floating-div {
+    position: fixed;
+    top: 12px;
+    right: 15px;
+    display: flex;
+    align-items: center; /* Center align buttons horizontally */
+    button {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add shadow */
+    }
+}
+
+.uri-column {
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.add-sub-api-section {
+    margin-left: -4px;
+    margin-right: -4px;
+    padding: 0 10px 20px 10px;
+    border-radius: 10px;
+    background: #f0f0f0;
+}
+
+.add-sub-api-dropdown {
+    width: 100%;
+}
+
+.page-img-list-vew {
+    border: 1px solid #001529;
+    width: 100%;
+    width: 300px;
+}
+
+.image-card {
+    padding: 10px;
+}
+
+.page-image-header {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.field-title {
+    color: #00000073;
+    width: 130px;
+    display: inline-block;
+}
+
+.uri-mode-select {
+    width: 127px;
+}
+
+.pl-10 {
+    padding-left: 10px;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.table-operations {
+    padding: 15px 0;
+}

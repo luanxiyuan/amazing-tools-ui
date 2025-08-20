@@ -1,0 +1,98 @@
+{
+  "_comments": "This is the global config file for all modules, each module should have its own config file, divided by module name, such as 'ui-marker-config.json' for translation_compare module",
+  "categories": [
+    {
+      "name": "Home",
+      "nzIcon": "home",
+      "uri": "/home"
+    },
+    {
+      "name": "System Tools",
+      "nzIcon": "cluster",
+      "apps": [
+        {
+          "id": "ui-marker",
+          "name": "System X - UI",
+          "desc": "Mark up and add notes to your pages, such as API information and code logic descriptions.",
+          "uri": "/ui-marker",
+          "eligible": true
+        },
+        {
+          "id": "api-tree",
+          "name": "System X - API",
+          "desc": "Easily get the API hierarchy of the systems, the structure of Open API and it's private API or SOAP service.",
+          "uri": "/api-tree",
+          "eligible": true
+        }
+      ]
+    },
+    {
+      "name": "Efficiency Tools",
+      "nzIcon": "code",
+      "apps": [
+        {
+          "id": "contacts",
+          "name": "Contacts",
+          "desc": "A personal contact management tool.",
+          "uri": "/contacts",
+          "eligible": true
+        },
+        {
+          "id": "one-step",
+          "name": "One Step",
+          "desc": "Easily start your project with a simple click and combine multiple instructions in one step.",
+          "uri": "/one-step",
+          "eligible": true
+        },
+        {
+          "id": "swagger-viewer",
+          "name": "Swagger Viewer",
+          "desc": "A tool to viwe swagger in user friendly UI.",
+          "uri": "/swagger-viewer",
+          "eligible": true
+        },
+        {
+          "id": "xsd-converter",
+          "name": "XSD to Java",
+          "desc": "A tool to convert XSD file to Java files.",
+          "uri": "/xsd-converter",
+          "eligible": true
+        },
+        {
+          "id": "base64-converter",
+          "name": "BASE64 Converter",
+          "desc": "A tool that can convert base64 data and files to each other.",
+          "uri": "/base64-converter",
+          "eligible": true
+        },
+        {
+          "id": "json-tool",
+          "name": "Json Tool",
+          "desc": "A tool to get the label and corresponding value from a json object.",
+          "uri": "/json-tool",
+          "eligible": true
+        },
+        {
+          "id": "web-note",
+          "name": "Web Note",
+          "desc": "Use browser capability to make it easy to take notes on web pages.",
+          "uri": "<html><head><title>Web Note</title></head><body contenteditable style=\"font-family:Verdana, Arial, Helvetica, sans-serif;font-size:3rem;line-height:1.4;max-width:80rem;margin:0 auto;padding:4rem;\" autofocus></body></html>",
+          "eligible": true
+        }
+      ]
+    },
+    {
+      "name": "Knowledge Tools",
+      "nzIcon": "deployment-unit",
+      "apps": [
+        {
+          "id": "abbreviations",
+          "name": "Abbreviations",
+          "desc": "A tool to find the full form of Abbreviations, as well as the Finance & Software industry specific terms.",
+          "uri": "/abbreviations",
+          "eligible": true
+        }
+      ]
+    }
+  ]
+}

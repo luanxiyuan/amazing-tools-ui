@@ -1,0 +1,102 @@
+/* You can add global styles to this file, and also import other style files */
+
+.pre-label-font {
+    font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji';
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 0;
+}
+
+.pre-label-breakline {
+    white-space: pre-wrap;
+    word-wrap: anywhere;
+}
+
+.break-text {
+    word-break: break-all;
+    overflow-wrap: break-word;
+    white-space: normal;
+    text-align: left;
+}
+
+/* padding settings */
+.p-0 { padding: 0; }
+.p-10 { padding: 10px; }
+.p-20 { padding: 20px; }
+.pt-7 { padding-top: 7px; }
+.pl-0 { padding-left: 0; }
+.pl-4 { padding-left: 4px; }
+.pl-10 { padding-left: 10px; }
+.pl-20 { padding-left: 20px; }
+.pl-70 { padding-left: 70px; }
+.pr-0 { padding-right: 0; }
+.pr-4 { padding-right: 4px; }
+
+/* marging settings */
+.mt-10 { margin-top: 10px; }
+.mt-20 { margin-top: 20px; }
+.mt-30 { margin-top: 30px; }
+.mt-70 { margin-top: 70px; }
+
+.mr-5 { margin-right: 5px; }
+.mr-8 { margin-right: 8px;}
+.mr-30 { margin-right: 30px; }
+
+.mb-4 { margin-bottom: 4px; }
+.mb-5 { margin-bottom: 5px; }
+.mb-10 { margin-bottom: 10px; }
+.mb-15 { margin-bottom: 15px; }
+.mb-20 { margin-bottom: 20px; }
+.mb-30 { margin-bottom: 30px; }
+
+.ml-5 { margin-left: 5px; }
+.ml-10 { margin-left: 10px; }
+.ml-20 { margin-left: 20px; }
+.ml-n10 { margin-left: -10px; }
+
+/* width settings */
+.min-w-100 {  min-width: 100px; }
+.min-w-150 { min-width: 150px; }
+
+.w-50 { width: 50px; }
+.w-60 { width: 60px; }
+.w-70 { width: 70px; }
+.w-80 { width: 80px; }
+.w-90 { width: 90px; }
+.w-100 { width: 100px; }
+.w-110 { width: 110px; }
+.w-120 { width: 120px; }
+.w-130 { width: 130px; }
+.w-150 { width: 150px; }
+.w-180 { width: 180px; }
+.w-200 { width: 200px; }
+.w-250 { width: 250px; }
+.w-300 { width: 300px; }
+.w-890 { width: 890px; }
+.w-p30 { width: 30%; }
+.min-w-300 { min-width: 300px; }
+.max-w-50p { max-width: 50%; }
+
+/* height settings */
+.min-h-100 { min-height: 100px; }
+
+/* font settings */
+.fw-600 { font-weight: 600; }
+
+.fs-12 { font-size: 12px; }
+.fs-18 { font-size: 18px;}
+
+.fc-red { color: red; }
+
+/* align setting */
+.align-right {
+    display: flex;
+    justify-content: flex-end;
+}
+.v-aligh-center {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}

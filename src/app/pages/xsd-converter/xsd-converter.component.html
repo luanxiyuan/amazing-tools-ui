@@ -1,0 +1,23 @@
+<nz-layout class="container-out">
+    <nz-header>
+        <div class="max-height-1000">
+            <div class="logo">
+                <span>XSD to Java</span>
+            </div>
+        </div>
+    </nz-header>
+
+    <nz-content>
+        <div class="inner-content">
+            <div class="fw-600">Java Package Name:</div>
+            <div class="mb-30">
+                <input nz-input placeholder="It'll be the default value if you leave it blank" nzSize="large" [(ngModel)]="packageName"/>
+            </div>
+            <app-upload-file [fileUploadURI]="fileUploadURI" [uploadParams]="setFileUploadParams"
+                (afterUploadedAction)="afterFileUpload($event)" [uploadNotes]="fileUploadNotes"
+                [fileExtName]="['xsd']"></app-upload-file>
+        </div>
+    </nz-content>
+</nz-layout>
+
+<app-loading-spinner [size]="'large'"></app-loading-spinner>

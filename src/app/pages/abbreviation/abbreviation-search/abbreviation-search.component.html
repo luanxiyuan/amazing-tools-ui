@@ -1,0 +1,111 @@
+<div class="inner-content">
+    <nz-input-group nzSearch nzSize="large" [nzAddOnAfter]="suffixButton" [nzSuffix]="inputClearName" [nzStatus]="searchStatus">
+        <input nz-input [(ngModel)]="searchText" (ngModelChange)="onSearchAbbreviationNames($event)"
+            (keydown.enter)="findByAbbreviation()" [nzAutocomplete]="autoAbbreviation"
+            placeholder="Input Abbreviation to Search" />
+        <nz-autocomplete [nzDataSource]="filteredAbbreviationNames" #autoAbbreviation></nz-autocomplete>
+    </nz-input-group>
+    <ng-template #inputClearName>
+        <span *ngIf="searchText" nz-icon class="ant-input-clear-icon" nzTheme="fill" nzType="close-circle"
+            (click)="clearSearchText()"></span>
+    </ng-template>
+    <ng-template #suffixButton>
+        <button nz-button nzType="primary" nzSize="large" nzSearch (click)="findByAbbreviation()">Search</button>
+    </ng-template>
+</div>
+
+<div class="floating-div">
+    <button nz-button nzSize="large" nz-tooltip nzTooltipPlacement="left" nzTooltipTitle="Add a Abbreviation"
+        nzType="primary" nzShape="circle" (click)="openAbbreviationAddDrawer()">
+        <span nz-icon nzType="plus-circle" nzTheme="outline"></span>
+    </button>
+</div>
+
+<div *ngIf="filteredAbbreviations.length == 0" class="inner-content">
+    <nz-content>
+        <div class="inner-content">
+            <nz-empty></nz-empty>
+        </div>
+    </nz-content>
+</div>
+
+<nz-ribbon *ngIf="filteredAbbreviations.length > 0" class="ribbon-count"
+    nzText="{{filteredAbbreviations.length}}"
+    nzColor="red">
+    <div class="inner-content">
+
+        <div class="mt-20">
+            <div>
+                <nz-list nzItemLayout="vertical">
+                    <div class="search-result" *ngFor="let abbreviation of filteredAbbreviations">
+                        <nz-card class="mb-20 border-dark-blue" [nzTitle]="abbreviation.abbreviation">
+                            <div nz-row [nzGutter]="16">
+                                <div nz-col class="gutter-row" [nzSpan]="10">
+                                    <div class="sub-title">Full Form</div>
+                                    <pre
+                                        class="pre-label-font pre-label-breakline">{{abbreviation.fullName ? abbreviation.fullName : 'NA'}}</pre>
+                                </div>
+
+                                <div nz-col class="gutter-row" [nzSpan]="14">
+                                    <div class="sub-title">Remarks</div>
+                                    <div [innerHTML]="abbreviation.remarks ? abbreviation.remarks : 'NA'"></div>
+                                </div>
+                            </div>
+                        </nz-card>
+
+                        <nz-space class="search-result-options">
+                            <button *nzSpaceItem nz-button nz-tooltip nzTooltipTitle="Edit this abbreviation"
+                                nzType="default" (click)="openAbbreviationEditDrawer(abbreviation.id)">
+                                <span nz-icon nzType="edit"></span>
+                            </button>
+                        </nz-space>
+                    </div>
+                </nz-list>
+            </div>
+        </div>
+    </div>
+</nz-ribbon>
+
+<!-- abbreviation edit drawer start -->
+<nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" [nzMaskClosable]="true" [nzWidth]="editDrawerWidth"
+    [nzVisible]="abbreviationAddOrEditDrawerVisible"
+    [nzTitle]="addOrEditMode === 'Edit' ? 'Edit Abbreviation Details' : 'Add an Abbreviation'" [nzFooter]="footerTpl"
+    (nzOnClose)="closeAbbreviationAddOrEditDrawer()">
+
+    <form nz-form *nzDrawerContent nzLayout="vertical" [formGroup]="validateAbbreviationForm">
+        <div class="api-details-div">
+            <nz-form-item>
+                <nz-form-label>Abbreviation</nz-form-label>
+                <nz-form-control nzErrorTip="Abbreviation is required">
+                    <input nz-input formControlName="abbreviation" placeholder="Input Abbreviation" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label>Full Form</nz-form-label>
+                <nz-form-control>
+                    <textarea nz-input formControlName="fullName" placeholder="Input Full Form"
+                        value={{selectedAbbreviation.fullName}} nzAutosize></textarea>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label>Remark</nz-form-label>
+                <nz-form-control>
+                    <textarea nz-input formControlName="remarks"
+                        placeholder="Input remark for this abbreviation, such as when it's being used"
+                        value={{selectedAbbreviation.remarks}} nzAutosize></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </form>
+
+    <ng-template #footerTpl>
+        <div style="float: right">
+            <button nz-button style="margin-right: 8px;" (click)="closeAbbreviationAddOrEditDrawer()">Cancel</button>
+            <button nz-button nzType="primary" [disabled]="!validateAbbreviationForm.valid"
+                (click)="submitAbbreviationForm()">Submit</button>
+        </div>
+    </ng-template>
+</nz-drawer>
+<!-- abbreviation edit drawer end -->

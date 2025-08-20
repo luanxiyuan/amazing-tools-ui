@@ -1,0 +1,5 @@
+<div class="loading-overlay" *ngIf="sharedStoreService.loading$ | async">
+    <nz-spin [nzSize]="size">
+        <ng-content></ng-content>
+    </nz-spin>
+</div>

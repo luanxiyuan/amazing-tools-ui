@@ -1,0 +1,111 @@
+{
+    "splunk": {
+        "MBOL": {
+            "envRoot": {
+                "UAT": {
+                    "label": "Splunk - UAT",
+                    "uri": {
+                        "ESB": "https://splunk-search-sw-dev.nam.nsroot.net:8000/en-US/app/search/search",
+                        "GM": "https://sd-d7bc-f6bc.nam.nsroot.net:8000/en-US/app/search/search"
+                    }
+                },
+                "PAT": {
+                    "label": "Splunk - PAT / PROD",
+                    "uri": {
+                        "ESB": "https://splunk-search-apac-p1.wlb.apac.nsroot.net:8000/en-US/app/search/search",
+                        "GM": "https://splunk-search-apac-p1.wlb.apac.nsroot.net:8000/en-US/app/COMMAND_CENTER/search"
+                    }
+                }
+            },
+            "application": {
+                "ESB": "CAPI",
+                "GM": "GM"
+            },
+            "market": {
+                "HK": "HK",
+                "SG": "SG",
+                "AE": "UAE",
+                "AU": "AU",
+                "UK": "UK",
+                "PL": "PL"
+            },
+            "cif": {
+                "label": "CIF number"
+            },
+            "username": {
+                "label": "User Name last 4 characters"
+            },
+            "diySearchLanguage": {
+                "label": "You could type in additional splunk search language, connecting with 'AND'"
+            },
+            "httpStatus": {
+                "all": "ALL",
+                "error": "Error",
+                "success": "Success"
+            },
+            "period": {
+                "-10m": "10 mins ago",
+                "-1h": "1 hour ago",
+                "-6h": "6 hours ago",
+                "-12h": "12 hours ago",
+                "-1d": "1 day ago",
+                "-2d": "2 days ago",
+                "-1w": "1 week ago",
+                "-1mon": "1 month ago",
+                "-1q": "1 quarter ago"
+            }
+        },
+        "CBOL": {
+            "envRoot": {
+                "UAT": {
+                    "label": "Splunk - UAT",
+                    "uri": {
+                        "ESB": "https://splunk-search-sw-dev.nam.nsroot.net:8000/en-US/app/search/search",
+                        "CBOL_APP": "https://sd-d7bc-f6bc.nam.nsroot.net:8000/en-US/app/search/search"
+                    }
+                },
+                "PAT": {
+                    "label": "Splunk - PAT / PROD",
+                    "uri": {
+                        "ESB": "https://splunk-search-apac-p1.wlb.apac.nsroot.net:8000/en-US/app/search/search",
+                        "CBOL_APP": "https://splunk-search-apac-p1.wlb.apac.nsroot.net:8000/en-US/app/COMMAND_CENTER/search"
+                    }
+                }
+            },
+            "application": {
+                "ESB": "CAPI",
+                "CBOL_APP": "CBOL App Server"
+            },
+            "market": {
+                "HK": "HK",
+                "SG": "SG",  
+                "AE": "UAE"
+            },
+            "cif": {
+                "label": "CIF number"
+            },
+            "username": {
+                "label": "User Name last 4 characters"
+            },
+            "diySearchLanguage": {
+                "label": "You could type in additional splunk search language, connecting with 'AND'"
+            },
+            "httpStatus": {
+                "error": "Error",
+                "success": "Success",
+                "all": "ALL"
+            },
+            "period": {
+                "-10m": "10 mins ago",
+                "-1h": "1 hour ago",
+                "-6h": "6 hours ago",
+                "-12h": "12 hours ago",
+                "-1d": "1 day ago",
+                "-2d": "2 days ago",
+                "-1w": "1 week ago",
+                "-1mon": "1 month ago",
+                "-1q": "1 quarter ago"
+            }
+        }
+    }
+}

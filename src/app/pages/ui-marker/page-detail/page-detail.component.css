@@ -1,0 +1,105 @@
+.page-img {
+    width: 100%;
+}
+
+nz-content {
+    padding: 0 50px;
+}
+
+canvas {
+    border: 1px solid lightgray;
+}
+
+.scroll-body {
+    overflow: auto;
+}
+
+.float-right {
+    float: right;
+}
+
+.element-details-dev {
+    /* background-color: #f0f0f0; */
+    padding: 0 0 10px 0;
+    /* border-radius: 5px; */
+}
+
+.other-supplements-div {
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.api-select {
+    width: 140px;
+}
+
+.api-condition-input {
+    width: 346px;
+}
+
+.api-url-input {
+    width: 591px;
+}
+
+.float-left {
+    float: left;
+}
+
+nz-form-item {
+    margin: 0 0 0 0 !important;
+}
+
+.api-details-view-div {
+    border: 1px darkgray solid;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.top-right-button {
+    position: absolute;
+    top: 10px; 
+    right: 10px; 
+  }
+
+.marker-form-title {
+    background: lightgrey;
+}
+
+.ant-divider-inner-text {
+    font-weight: 700 !important;
+}
+
+.sampleReqResDiv button {
+    visibility: hidden;
+}
+
+.sampleReqResDiv:hover button {
+    visibility: visible;
+}
+
+.popup {
+    position: absolute;
+    background: white;
+    border: 1px darkgray solid;
+    border-radius: 5px;
+    padding: 8px;
+    z-index: 1000;
+}
+
+@keyframes flash {
+    0% { background-color: #f0f0f0; } 
+    20% { background-color: #ffcccb; }
+    40% { background-color: #f0f0f0; } 
+    60% { background-color: #ffcccb; }
+    80% { background-color: #f0f0f0; } 
+    100% { background-color: #ffcccb; }
+}
+
+.flash-background {
+    animation: flash 3s linear;
+}

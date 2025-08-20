@@ -1,0 +1,56 @@
+.search-form {
+    border-bottom: 1px solid darkgrey;
+}
+
+.floating-div {
+    position: fixed;
+    top: 85px;
+    right: 20px;
+    display: block;
+}
+
+.floating-div.show {
+    display: block;
+}
+
+.uri-column {
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.add-sub-api-section {
+    margin-left: -4px;
+    margin-right: -4px;
+    padding: 0 10px 20px 10px;
+    border-radius: 10px;
+    background: #f0f0f0;
+}
+
+.add-sub-api-dropdown {
+    width: 100%;
+}
+
+.page-img-list-vew {
+    border: 1px solid #001529;
+    width: 100%;
+    width: 300px;
+}
+
+.image-card {
+    padding: 10px;
+}
+
+.page-image-header {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.field-title {
+    color: #00000073;
+    width: 130px;
+    display: inline-block;
+}
+
+.uri-mode-select {
+    width: 127px;
+}

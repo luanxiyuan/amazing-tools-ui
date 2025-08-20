@@ -1,0 +1,21 @@
+<nz-layout class="container-out">
+    <nz-header>
+        <div class="max-height-1000">
+            <div class="logo">
+                <span>Abbreviation</span>
+                <span class="ml-10">
+                    <nz-tag class="sub-logo-title" [nzColor]="'#1890ff'">
+                        <strong>{{ totalCount }}</strong> 
+                        terms in total
+                    </nz-tag>
+                </span>
+            </div>
+        </div>
+    </nz-header>
+
+    <nz-content>
+        <router-outlet></router-outlet>
+    </nz-content>
+</nz-layout>
+
+<app-loading-spinner [size]="'large'"></app-loading-spinner>

@@ -1,0 +1,124 @@
+.image-card {
+    padding: 10px;
+}
+
+.page-img-grid-view {
+    border: 1px solid #001529;
+    width: 100%;
+}
+
+.page-img-list-vew {
+    border: 1px solid #001529;
+    width: 100%;
+    min-width: 350px;
+    max-width: 500px;
+}
+
+.content-body {
+    margin-top: 15px !important;
+}
+
+@media (min-width: 2000px) {
+    .super-width-adapt {
+        display: block;
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+    .super-width-adapt-mobile {
+        display: block;
+        flex: 0 0 16.66666666%;
+        max-width: 16.66666666%;
+    }
+}
+
+@media (min-width: 2500px) {
+    .super-width-adapt {
+        display: block;
+        flex: 0 0 20%;
+        max-width: 20%;
+    }
+    .super-width-adapt-mobile {
+        display: block;
+        flex: 0 0 12.5%;
+        max-width: 12.5%;
+    }
+}
+
+@media (min-width: 3000px) {
+    .super-width-adapt {
+        display: block;
+        flex: 0 0 16.66666666%;
+        max-width: 16.66666666%;
+    }
+    .super-width-adapt-mobile {
+        display: block;
+        flex: 0 0 10%;
+        max-width: 10%;
+    }
+}
+
+.ant-layout-content {
+    flex: none !important;
+}
+
+.ant-modal {
+    max-width: 1000px;
+    width: 70% !important;
+}
+
+nz-content {
+    padding: 0 50px;
+}
+
+nz-breadcrumb {
+    margin: 16px 0;
+}
+
+.inner-content {
+    background: #fff;
+    padding: 24px;
+    min-height: 380px;
+}
+
+.page-image-body {
+    position: relative;
+}
+
+.page-image-options {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none;
+    padding: 8px 8px 0 0;
+    animation: swipeRightToLeft 0.2s forwards;
+}
+
+@keyframes swipeRightToLeft {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.page-image-body:hover .page-image-options {
+    display: inline-flex;
+}
+
+.list-card {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.page-list-div {
+    border-bottom: 1px solid lightgray;
+}
+
+.page-image-header {
+    font-size: 14px;
+    font-weight: 400;
+}

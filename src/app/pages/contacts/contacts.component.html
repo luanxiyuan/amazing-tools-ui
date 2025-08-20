@@ -1,0 +1,50 @@
+<nz-layout class="container-out">
+    <nz-header>
+        <div class="logo">My Contacts</div>
+        <ul nz-menu nzTheme="dark" nzMode="horizontal">
+            <li nz-menu-item [nzSelected]="findPersonFlag" (click)="switchFindType('person')">
+                <span>Find a Person</span>
+            </li>
+            <li nz-menu-item [nzSelected]="findTeamFlag" (click)="switchFindType('team')">
+                <span>Find a Team</span>
+            </li>
+            <li *ngIf="upcomingBirthdayPersons.length > 0" nz-menu-item (click)="openNotificationPopup()">
+                <nz-badge [nzDot]="'dot'">
+                    <span class="notification" nz-icon nzType="notification" nzTheme="outline"></span>
+                </nz-badge>
+            </li>
+        </ul>
+    </nz-header>
+    
+    <nz-content>
+        <div class="inner-content">
+            <router-outlet></router-outlet>
+        </div>
+    </nz-content>
+</nz-layout>
+
+<nz-modal [(nzVisible)]="showNotificationDialog" [nzTitle]="'Notifications'" (nzOnCancel)="closeNotificationDialog()" [nzWidth]="900">
+    <ng-container *nzModalContent>
+        <div nz-row [nzGutter]="8">
+            <div nz-col nzSpan="24">
+                <nz-divider nzOrientation="left" nzText="Upcoming Birthday"></nz-divider>
+            </div>
+        </div>
+        <div class="upcoming-birthday-div">
+            <div *ngFor="let personObj of upcomingBirthdayPersons">
+                <div class="mb-30" *ngIf="personObj?.persons && personObj?.persons!.length > 0">
+                    <h3>{{personObj.categoryName}}</h3>
+                    <span class="mb-10 mr-30" *ngFor="let person of personObj.persons">
+                        {{person.name}}
+                        <span nz-icon nz-tooltip nzTooltipTitle="Chat in Teams" nzType="message" nzTheme="outline" (click)="openTeamsWindow(person.soeId)"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <div *nzModalFooter>
+        <button nz-button nzType="primary" (click)="closeNotificationDialog()">Close</button>
+    </div>
+</nz-modal>
+
+<app-loading-spinner [size]="'large'"></app-loading-spinner>

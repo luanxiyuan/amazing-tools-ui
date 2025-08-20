@@ -1,0 +1,35 @@
+
+.container-out {
+    min-height: 100%;
+}
+
+.logo {
+    width: 600px;
+    height: 60px;
+    float: left;
+    font-size: 20px;
+    color: #fff;
+}
+
+.inner-content {
+    background: #fff;
+    padding: 24px;
+    height: 100%;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+nz-content {
+    padding: 0 50px 50px 50px;
+}
+
+.max-height-1000 {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.light-gray-border {
+    border: 1px solid lightgray;
+    border-radius: 2px;
+}

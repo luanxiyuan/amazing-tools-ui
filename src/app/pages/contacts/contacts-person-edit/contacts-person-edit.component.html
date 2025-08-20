@@ -1,0 +1,63 @@
+<nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" [nzMaskClosable]="true" [nzWidth]="editDrawerWidth"
+    [nzVisible]="personAddOrEditDrawerVisible.show" [nzTitle]="addOrEditMode === 'Edit' ? 'Edit Person Details' : 'Add a Person'" [nzFooter]="footerTpl"
+    (nzOnClose)="closePersonAddOrEditDrawer()">
+
+    <form nz-form *nzDrawerContent nzLayout="vertical" [formGroup]="validatePersonForm">
+        <div class="api-details-div">
+            <nz-form-item>
+                <nz-form-label>SOE ID</nz-form-label>
+                <nz-form-control nzErrorTip="SOE ID is required">
+                    <input nz-input formControlName="soeId" placeholder="SOE ID" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label>Name</nz-form-label>
+                <nz-form-control nzErrorTip="Person name is required">
+                    <input nz-input formControlName="name" placeholder="Input person name" />
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label>Birthday</nz-form-label>
+                <nz-form-control>
+                    <nz-cascader formControlName="birthday" [nzExpandTrigger]="'hover'" [nzOptions]="birthdayOptions"></nz-cascader>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label>Belongs to Team</nz-form-label>
+                <nz-form-control>
+                    <nz-select nzShowSearch nzAllowClear formControlName="team" [nzDisabled]="true" [ngModel]="defaultTeam.id">
+                        <nz-option *ngFor="let team of teams" [nzValue]="team.id" [nzLabel]="team.name"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label>Location</nz-form-label>
+                <nz-form-control>
+                    <nz-select nzShowSearch nzAllowClear formControlName="location">
+                        <nz-option *ngFor="let location of locations" [nzValue]="location.id" [nzLabel]="location.name"></nz-option>
+                    </nz-select>
+                </nz-form-control>
+            </nz-form-item>
+
+            <nz-form-item>
+                <nz-form-label>Remark</nz-form-label>
+                <nz-form-control>
+                    <textarea nz-input formControlName="remark"
+                        placeholder="Input remark of this person" nzAutosize></textarea>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+    </form>
+
+    <ng-template #footerTpl>
+        <div style="float: right">
+            <button nz-button style="margin-right: 8px;" (click)="closePersonAddOrEditDrawer()">Cancel</button>
+            <button nz-button nzType="primary" [disabled]="!validatePersonForm.valid"
+                (click)="submitPersonForm()">Submit</button>
+        </div>
+    </ng-template>
+</nz-drawer>
