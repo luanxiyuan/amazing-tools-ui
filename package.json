@@ -39,6 +39,7 @@
     "@types/fabric": "^5.3.7",
     "@types/jasmine": "~4.3.0",
     "@types/lodash-es": "^4.17.12",
+    "@types/node": "^24.3.0",
     "@types/swagger-ui": "^3.52.4",
     "@types/uuid": "^10.0.0",
     "css-loader": "^7.1.2",
