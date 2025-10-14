@@ -25,7 +25,7 @@ export enum SYS_SETTINGS {
     SPLUNK_CONFIG_FILE_PATH = './assets/configs/splunk-config.json',
 };
 
-export const ADMIN_SOEID = 'xl52284';
+export const ADMIN_ID = 'xl52284';
 export const APPLICATIONS_BY_REGION = ['GFT', "GT"];
 export const APPLICATIONS_BY_MARKET = ['CBOL', 'MBOL'];
 export const APPLICATION_MARKETS = ['Common', 'SG', 'HK', 'UAE', 'PL'];

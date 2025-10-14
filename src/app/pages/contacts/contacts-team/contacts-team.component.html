@@ -156,7 +156,7 @@
         <nz-table [nzData]="selectedTeam!.persons!" nzShowPagination="false">
             <thead>
                 <tr>
-                    <th>SOE ID</th>
+                    <th>ID</th>
                     <th>
                         Name
                         <nz-badge nzStandalone [nzOverflowCount]="badgeOverflowCount" [nzCount]="selectedTeam!.persons?.length"></nz-badge>
@@ -170,7 +170,7 @@
                 <tr *ngFor="let data of selectedTeam!.persons!">
                     <td>
                         <button class="mr-8" *ngIf="data.soeId" nz-button nzType="default" (click)="copyString(data.soeId)">
-                            <span nz-icon nz-tooltip nzTooltipTitle="Copy SOE ID" nzType="copy"
+                            <span nz-icon nz-tooltip nzTooltipTitle="Copy ID" nzType="copy"
                                 nzTheme="outline"></span>
                         </button>
                         <button class="mr-8" *ngIf="bbContributionUrl && data.soeId" nz-button nzType="default" (click)="viewBbContribution(data.soeId)">

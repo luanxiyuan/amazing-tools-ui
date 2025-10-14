@@ -1,13 +1,13 @@
 <div class="search-form">
     <form nz-form [formGroup]="searchForm" class="ant-advanced-search-form">
         <div nz-row [nzGutter]="24">
-            <!-- SOEID Input -->
+            <!-- ID Input -->
             <div nz-col [nzSpan]="9">
                 <nz-form-item>
-                    <nz-form-label nzFor="soeid">SOEID(s)</nz-form-label>
+                    <nz-form-label nzFor="soeid">ID(s)</nz-form-label>
                     <nz-form-control>
                         <nz-input-group [nzSuffix]="inputClearSoeid">
-                            <input nz-input formControlName="soeid" placeholder="Input 1 or multiple SOEIDs divided by ,"/>
+                            <input nz-input formControlName="soeid" placeholder="Input 1 or multiple IDs divided by ,"/>
                         </nz-input-group>
                         <ng-template #inputClearSoeid>
                             <span *ngIf="searchForm.get('soeid')?.value" nz-icon class="ant-input-clear-icon"

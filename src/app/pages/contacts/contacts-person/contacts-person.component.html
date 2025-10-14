@@ -43,7 +43,7 @@
         <div nz-row [nzGutter]="24">
             <div nz-col [nzSpan]="8">
                 <nz-form-item>
-                    <nz-form-label nzFor="soeId">SOE ID</nz-form-label>
+                    <nz-form-label nzFor="soeId">ID</nz-form-label>
                     <nz-form-control>
                         <input nz-input formControlName="soeId" />
                     </nz-form-control>
@@ -97,7 +97,7 @@
     id="tableDiv">
     <thead>
         <tr>
-            <th>SOE ID</th>
+            <th>ID</th>
             <th>
                 Name
                 <nz-badge nzStandalone [nzOverflowCount]="badgeOverflowCount" [nzCount]="filteredPersonCount"></nz-badge>
@@ -112,7 +112,7 @@
         <tr *ngFor="let data of displayPersons">
             <td>
                 <button class="mr-8" *ngIf="data.soeId" nz-button nzType="default" (click)="copyString(data.soeId)">
-                    <span nz-icon nz-tooltip nzTooltipTitle="Copy SOE ID" nzType="copy" nzTheme="outline"></span>
+                    <span nz-icon nz-tooltip nzTooltipTitle="Copy ID" nzType="copy" nzTheme="outline"></span>
                 </button>
                 <button class="mr-8" *ngIf="bbContributionUrl && data.soeId" nz-button nzType="default" (click)="viewBbContribution(data.soeId)">
                     <span nz-icon nz-tooltip nzTooltipTitle="View code delivery" nzType="code" nzTheme="outline"></span>
@@ -134,10 +134,10 @@
                 <span>{{data.name}}</span>
             </td>
             <td>
-                <button class="mr-8" nz-button nzType="default" (click)="viewTeamInfo(data.team)">
+                <button *ngIf="data.teamName" class="mr-8" nz-button nzType="default" (click)="viewTeamInfo(data.team)">
                     <span nz-icon nz-tooltip nzTooltipTitle="View Team Info" nzType="info-circle" nzTheme="outline"></span>
                 </button>
-                <button class="mr-8" nz-button nzType="default" (click)="viewTeamMembers(data.team)">
+                <button *ngIf="data.teamName" class="mr-8" nz-button nzType="default" (click)="viewTeamMembers(data.team)">
                     <span nz-icon nz-tooltip nzTooltipTitle="View team members" nzType="ordered-list" nzTheme="outline"></span>
                 </button>
                 <span>{{data.teamName}}</span>
@@ -169,9 +169,9 @@
     <form nz-form *nzDrawerContent nzLayout="vertical" [formGroup]="validatePersonForm">
         <div class="api-details-div">
             <nz-form-item>
-                <nz-form-label>SOE ID</nz-form-label>
-                <nz-form-control nzErrorTip="SOE ID is required">
-                    <input nz-input formControlName="soeId" placeholder="SOE ID" />
+                <nz-form-label>ID</nz-form-label>
+                <nz-form-control nzErrorTip="ID is required">
+                    <input nz-input formControlName="soeId" placeholder="ID" />
                 </nz-form-control>
             </nz-form-item>
 

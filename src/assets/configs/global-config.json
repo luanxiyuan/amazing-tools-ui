@@ -71,13 +71,6 @@
           "desc": "A tool to get the label and corresponding value from a json object.",
           "uri": "/json-tool",
           "eligible": true
-        },
-        {
-          "id": "web-note",
-          "name": "Web Note",
-          "desc": "Use browser capability to make it easy to take notes on web pages.",
-          "uri": "<html><head><title>Web Note</title></head><body contenteditable style=\"font-family:Verdana, Arial, Helvetica, sans-serif;font-size:3rem;line-height:1.4;max-width:80rem;margin:0 auto;padding:4rem;\" autofocus></body></html>",
-          "eligible": true
         }
       ]
     },
@@ -90,6 +83,26 @@
           "name": "Abbreviations",
           "desc": "A tool to find the full form of Abbreviations, as well as the Finance & Software industry specific terms.",
           "uri": "/abbreviations",
+          "eligible": true
+        }
+      ]
+    },
+    {
+      "name": "3rd Party Tools",
+      "nzIcon": "link",
+      "apps": [
+        {
+          "id": "web-note",
+          "name": "Web Note",
+          "desc": "Use browser capability to make it easy to take notes on web pages.",
+          "uri": "<html><head><title>Web Note</title></head><body contenteditable style=\"font-family:Verdana, Arial, Helvetica, sans-serif;font-size:3rem;line-height:1.4;max-width:80rem;margin:0 auto;padding:4rem;\" autofocus></body></html>",
+          "eligible": true
+        },
+        {
+          "id": "excalidraw",
+          "name": "Excalidraw",
+          "desc": "A tool to draw the diagrams and notes.",
+          "uri": "https://excalidraw.com/",
           "eligible": true
         }
       ]

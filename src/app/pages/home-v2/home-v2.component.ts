@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FileToolService } from '../../services/common/file-tool.service'
 import { CommunicationToolService } from '../../services/common/communication-tool.service';
 import { AppCategory } from '../../types/home-type';
-import { ADMIN_SOEID } from '../../consts/sys-consts';
+import { ADMIN_ID } from '../../consts/sys-consts';
 import { UrlToolService } from '../../services/common/url-tool.service';
 
 @Component({
@@ -54,7 +54,7 @@ export class HomeV2Component {
   }
 
   openTeamsWindow() {
-    this.communicationToolService.openTeamsWindow(ADMIN_SOEID);
+    this.communicationToolService.openTeamsWindow(ADMIN_ID);
   }
 
 }

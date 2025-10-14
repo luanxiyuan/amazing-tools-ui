@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { BbContributionService } from '../../../services/bb-contribution/bb-contribution.service';
 import { CommitRecord, RepoInfo, TableFilterOption } from '../../../types/bb-contribution';
-import { ADMIN_SOEID, BB_CONTRIBUTION_SETTINGS } from '../../../consts/sys-consts';
+import { ADMIN_ID, BB_CONTRIBUTION_SETTINGS } from '../../../consts/sys-consts';
 import { UrlToolService } from '../../../services/common/url-tool.service';
 import { ActivatedRoute } from '@angular/router';
 import { cloneDeep, get } from 'lodash-es';
@@ -179,7 +179,7 @@ export class CommitListComponent extends BaseComponent {
     const soeid = this.searchForm.get('soeid')?.value;
 
     if (!soeid) {
-      this.msg.error('Please input SOEID(s)');
+      this.msg.error('Please input ID(s)');
       return false;
     }
 
@@ -447,7 +447,7 @@ export class CommitListComponent extends BaseComponent {
   }
 
   contactAdminToAddRepo() {
-    this.communicationToolService.openTeamsWindow(ADMIN_SOEID);
+    this.communicationToolService.openTeamsWindow(ADMIN_ID);
   }
 
 }
