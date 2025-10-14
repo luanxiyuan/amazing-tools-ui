@@ -159,6 +159,17 @@ export class UrlToolService {
     });
   }
 
+  navigateToUri(uri: string): string {
+    const currentUri = this.getCurrentUri();
+    let navigateUri = '';
+    if (currentUri.includes('home-v2')) {
+      navigateUri = `/home-v2${uri}`;
+    } else {
+      navigateUri = `${uri}`;
+    }
+    return navigateUri;
+  }
+
   linkToOtherSite(uri: string, newWindowFlag: boolean = true, autoCloseAfter: number = 0): void {
     if (newWindowFlag) {
       this.newWindow = window.open(uri, '_blank');

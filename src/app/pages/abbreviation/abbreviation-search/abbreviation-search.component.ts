@@ -60,10 +60,12 @@ export class AbbreviationSearchComponent extends BaseComponent {
     // initilize the abbreviationHomePage
     this.fileToolService.loadGlobalConfigFile().subscribe((data: any) => {
       const moduleId = MODULE_NAMES.ABBREVIATIONS;
-      const modules = data['apps'] || [];
+      const categories = data['categories'] || [];
+      const modules = categories.flatMap((category: any) => category.apps || []);
       const moduleConfig =  modules.find((module: any) => module.id === moduleId);
-      const abbreviationHomePage = moduleConfig?.uri || '';
-      this.abbreviationSearchLink = `${abbreviationHomePage}${ABBREVIATION_SETTINGS.SEARCH_LINK}`;
+      const abbreviationUri = moduleConfig?.uri || '';
+      const abbreviationHomePage = this.uriToolService.navigateToUri(abbreviationUri);
+      this.abbreviationSearchLink = `${abbreviationHomePage}/${ABBREVIATION_SETTINGS.SEARCH_LINK}`;
     });
 
     // Fetch the abbreviation list from a service or API

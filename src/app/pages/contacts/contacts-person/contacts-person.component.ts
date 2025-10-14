@@ -97,7 +97,8 @@ export class ContactsPersonComponent extends BaseComponent implements AfterViewI
     });
 
     this.fileToolService.loadGlobalConfigFile().subscribe((data: any) => {
-      const toolApps = data['apps'] || [];
+      const categories = data['categories'] || [];
+      const toolApps = categories.flatMap((category: any) => category.apps || []);
       const appConf = toolApps.filter((app: ToolApps) => app.id === MODULE_NAMES.BB_CONTRIBUTION);
       if (appConf.length > 0) {
         const bbContributionHomePage = get(appConf[0], 'uri', '');
