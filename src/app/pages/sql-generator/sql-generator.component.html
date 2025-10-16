@@ -1,0 +1,163 @@
+<nz-layout class="sql-generator-container">
+  <nz-header>
+    <div class="logo">
+      <span>SQL Prompt Generator</span>
+    </div>
+  </nz-header>
+
+  <nz-content>
+    <div class="inner-content">
+      <div class="content-wrapper">
+        <!-- Left Panel - Form -->
+        <div class="form-panel">
+          <nz-card>
+            <form nz-form [formGroup]="dbConnectionForm" class="db-connection-form">
+              <!-- Database Connection Section -->
+              <div class="form-section">
+                <h3>Database Connection</h3>
+                <nz-form-item>
+                  <nz-form-label nzRequired>Database Type</nz-form-label>
+                  <nz-form-control>
+                    <nz-select formControlName="dbType">
+                      <nz-option *ngFor="let type of databaseTypes" [nzValue]="type.name" [nzLabel]="type.value"></nz-option>
+                    </nz-select>
+                  </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                  <nz-form-label nzRequired>Host</nz-form-label>
+                  <nz-form-control>
+                    <input nz-input formControlName="host" placeholder="localhost" />
+                  </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                  <nz-form-label nzRequired>Port</nz-form-label>
+                  <nz-form-control>
+                    <input nz-input formControlName="port" placeholder="3306" />
+                  </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                  <nz-form-label nzRequired>Database Name</nz-form-label>
+                  <nz-form-control>
+                    <input nz-input formControlName="database" placeholder="testDatabase" />
+                  </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                  <nz-form-label nzRequired>Username</nz-form-label>
+                  <nz-form-control>
+                    <input nz-input formControlName="username" placeholder="testUser" />
+                  </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                  <nz-form-label nzRequired>Password</nz-form-label>
+                  <nz-form-control>
+                    <input nz-input type="password" formControlName="password" placeholder="testPassword" />
+                  </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item>
+                  <nz-form-control>
+                    <button nz-button nzType="primary" (click)="checkConnection()" [nzLoading]="isConnectionLoading" 
+                            [disabled]="!dbConnectionForm.valid">
+                      Connect
+                    </button>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+            </form>
+
+            <form nz-form [formGroup]="queryRequirementForm" class="query-requirement-form">
+              <!-- Tables Section -->
+              <div class="form-section">
+                <h3>Table(s) to be Used</h3>
+                <div class="table-selection">
+                  <div formArrayName="tables">
+                    <div *ngFor="let table of tables.controls; let i = index" class="table-item">
+                      <nz-form-item>
+                        <nz-form-control>
+                          <nz-select [formControlName]="i" [nzPlaceHolder]="'Select table'" [nzShowSearch]="true">
+                            <nz-option *ngFor="let option of tableOptions" [nzValue]="option" [nzLabel]="option"></nz-option>
+                          </nz-select>
+                        </nz-form-control>
+                      </nz-form-item>
+                      <button nz-button nzType="default" nzShape="circle" (click)="removeTable(i)" 
+                              [disabled]="tables.length <= 1">
+                        <span nz-icon nzType="minus"></span>
+                      </button>
+                    </div>
+                  </div>
+                  <button nz-button nzType="dashed" (click)="addTable()" class="add-table-btn">
+                    <span nz-icon nzType="plus"></span>
+                    <span>Add Table</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Operation Type Section -->
+              <div class="form-section">
+                <h3>Operation Type</h3>
+                <nz-form-item>
+                  <nz-form-control>
+                    <nz-segmented formControlName="operationType" [nzOptions]="operationTypeOptions"></nz-segmented>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+
+              <!-- Business Requirement Section -->
+              <div class="form-section" *ngIf="isQueryOperation">
+                <h3>Business Requirement</h3>
+                <p class="business-requirement-subtitle">Please enter the requirement such as query column names, filter conditions, sort, and pagination information.</p>
+                <nz-form-item>
+                  <nz-form-control>
+                    <textarea nz-input formControlName="businessRequirement" 
+                              class="query-requirement-textarea"
+                              placeholder="Query target, filter conditions, sorting, pagination information"></textarea>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+
+              <!-- Existing SQL Section -->
+              <div class="form-section" *ngIf="isOptimizeOperation">
+                <h3>Existing SQL</h3>
+                <nz-form-item>
+                  <nz-form-control>
+                    <textarea nz-input formControlName="existingSql" 
+                              class="existing-sql-textarea"
+                              placeholder="Please enter the existing SQL"></textarea>
+                  </nz-form-control>
+                </nz-form-item>
+              </div>
+
+              <!-- Generate Button -->
+              <div class="form-section">
+                <button nz-button nzType="primary" (click)="generatePrompt()" [nzLoading]="isGenerating">
+                  Generate
+                </button>
+              </div>
+            </form>
+          </nz-card>
+        </div>
+
+        <!-- Right Panel - Result Display -->
+        <div class="result-panel">
+          <nz-card class="result-card">
+            <div class="result-header">
+              <span class="result-title">Generated Prompt</span>
+              <button nz-button nzType="primary" (click)="copyToClipboard()" [disabled]="!generatedPrompt" class="copy-button">
+                <span nz-icon nzType="copy"></span>
+                Copy
+              </button>
+            </div>
+            <div class="result-content">
+              <pre>{{ generatedPrompt || 'Generated prompt will appear here...' }}</pre>
+            </div>
+          </nz-card>
+        </div>
+      </div>
+    </div>
+  </nz-content>
+</nz-layout>

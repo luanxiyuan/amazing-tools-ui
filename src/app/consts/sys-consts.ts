@@ -18,6 +18,7 @@ export enum MODULE_TITLES {
     BB_CONTRIBUTION = 'Delivery Statistics Tool',
     JSON_TOOL = 'Json Tools',
     QUERY_OTP_TOOL = 'Query OTP Tool',
+    SQL_GENERATOR = 'SQL Generator',
 };
 
 export enum SYS_SETTINGS {
@@ -209,6 +210,14 @@ export enum BB_CONTRIBUTION_URIS {
     REFRESH_COMMIT_LIST = API_BASE_URL + '/bb_contribution/commit_list/refresh',
     GET_REFRESH_INFO = API_BASE_URL + '/bb_contribution/commit_list/refresh_info',
     GET_REPO_LINKS = API_BASE_URL + '/bb_contribution/repo_links'
+}
+
+export enum SQL_GENERATOR_URIS {
+    GET_DB_TYPES = API_BASE_URL + '/sql_generator/db_types',
+    GET_TABLES = API_BASE_URL + '/sql_generator/tables',
+    CHECK_DB_CONNECTION = API_BASE_URL + '/sql_generator/check_db_connection',
+    GET_TABLE_COLUMNS = API_BASE_URL + '/sql_generator/table_columns',
+    GET_DB_PROMPTS = API_BASE_URL + '/sql_generator/db_prompts'
 }
 
 export enum ELEMENT_FORM_PREFIX {

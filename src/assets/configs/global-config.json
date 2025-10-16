@@ -7,7 +7,7 @@
       "uri": "/home"
     },
     {
-      "name": "System Tools",
+      "name": "Tech Design Tools",
       "nzIcon": "cluster",
       "apps": [
         {
@@ -83,6 +83,19 @@
           "name": "Abbreviations",
           "desc": "A tool to find the full form of Abbreviations, as well as the Finance & Software industry specific terms.",
           "uri": "/abbreviations",
+          "eligible": true
+        }
+      ]
+    },
+    {
+      "name": "Prompt Tools",
+      "nzIcon": "file-text",
+      "apps": [
+        {
+          "id": "sql-generator",
+          "name": "SQL Prompt Generator",
+          "desc": "A tool that generates prompts that LLM can understand, it can produce the optimal SQL script with a simple description.",
+          "uri": "/sql-generator",
           "eligible": true
         }
       ]

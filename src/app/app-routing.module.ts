@@ -14,6 +14,7 @@ const routes: Routes = [
   { path: 'json-tool', loadChildren: () => import('./pages/json-tool/json-tool.module').then(m => m.JsonToolModule) },
   { path: 'one-step', loadChildren: () => import('./pages/one-step/one-step.module').then(m => m.OneStepModule) },
   { path: 'base64-converter', loadChildren: () => import('./pages/base64-converter/base64-converter.module').then(m => m.Base64ConverterModule) },
+  { path: 'sql-generator', loadChildren: () => import('./pages/sql-generator/sql-generator.module').then(m => m.SqlGeneratorModule) },
   { path: 'home-v2', loadChildren: () => import('./pages/home-v2/home-v2.module').then(m => m.HomeV2Module) },
   { path: '**', loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule) }
 ];

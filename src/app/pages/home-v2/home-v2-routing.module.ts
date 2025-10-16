@@ -19,6 +19,7 @@ import { ApiListComponent } from '../api-tree/api-list/api-list.component';
 import { CommitListComponent } from '../bb-contribution/commit-list/commit-list.component';
 import { ContactsPersonComponent } from '../contacts/contacts-person/contacts-person.component';
 import { ContactsTeamComponent } from '../contacts/contacts-team/contacts-team.component';
+import { SqlGeneratorComponent } from '../sql-generator/sql-generator.component';
 
 const routes: Routes = [
   { path: '', component: HomeV2Component, children: [
@@ -55,7 +56,8 @@ const routes: Routes = [
       },
       { path: 'json-tool', component: JsonToolComponent },
       { path: 'one-step', component: OneStepComponent },
-      { path: 'base64-converter', component: Base64ConverterComponent }
+      { path: 'base64-converter', component: Base64ConverterComponent },
+      { path: 'sql-generator', component: SqlGeneratorComponent },
     ]
   },
 ];

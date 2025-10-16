@@ -147,13 +147,7 @@ export class UrlToolService {
   }
 
   navigateTo(uri: string, queryParams: any): void {
-    const currentUri = this.getCurrentUri();
-    let navigateUri = '';
-    if (currentUri.includes('home-v2')) {
-      navigateUri = `/home-v2${uri}`;
-    } else {
-      navigateUri = `${uri}`;
-    }
+    const navigateUri = this.navigateToUri(uri);
     this.router.navigate([navigateUri], {
       queryParams: queryParams,
     });
