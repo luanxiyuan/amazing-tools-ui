@@ -138,12 +138,20 @@ export class SqlGeneratorComponent {
             this.loadTables();
           } else {
             this.message.error(response.message || 'Database connection failed');
+            // Clear loaded tables on connection failure
+            this.tableOptions = [];
+            // Clear table selections
+            this.clearTableSelections();
           }
         },
         error: (error: any) => {
           this.isConnectionLoading = false;
           console.error('Connection error:', error);
           this.message.error('Database connection failed');
+          // Clear loaded tables on connection error
+          this.tableOptions = [];
+          // Clear table selections
+          this.clearTableSelections();
         }
       });
     } else {
@@ -279,5 +287,17 @@ export class SqlGeneratorComponent {
         this.message.error('Failed to copy prompt');
       });
     }
+  }
+
+  /**
+   * Clear all table selections in the form
+   */
+  private clearTableSelections(): void {
+    // Clear all table selections by setting them to empty strings
+    while (this.tables.length > 0) {
+      this.tables.removeAt(0);
+    }
+    // Add one empty table control back
+    this.tables.push(this.fb.control(''));
   }
 }
